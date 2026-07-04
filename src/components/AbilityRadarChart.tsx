@@ -39,9 +39,10 @@ export default function AbilityRadarChart({ scores }: AbilityRadarChartProps) {
         <Radar
           name="能力值"
           dataKey="value"
-          stroke="#6366f1"
-          fill="#6366f1"
-          fillOpacity={0.3}
+          stroke="#1E293B"
+          fill="#1E293B"
+          fillOpacity={0.15}
+          strokeWidth={2}
         />
       </RadarChart>
     </ResponsiveContainer>

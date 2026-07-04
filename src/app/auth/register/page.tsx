@@ -71,7 +71,7 @@ export default function RegisterPage() {
   return (
     <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-8">
       <div className="bg-white p-8 rounded-xl w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">注册履程</h1>
+        <h1 className="text-2xl font-bold text-center text-slate-900 mb-6">注册履程</h1>
         {error && (
           <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
             {error}
@@ -84,7 +84,7 @@ export default function RegisterPage() {
               type="text"
               value={formData.name}
               onChange={(e) => updateField('name', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               required
             />
           </div>
@@ -94,7 +94,7 @@ export default function RegisterPage() {
               type="email"
               value={formData.email}
               onChange={(e) => updateField('email', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               required
             />
           </div>
@@ -104,7 +104,7 @@ export default function RegisterPage() {
               type="password"
               value={formData.password}
               onChange={(e) => updateField('password', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               required
               minLength={6}
             />
@@ -115,7 +115,7 @@ export default function RegisterPage() {
               type="password"
               value={formData.confirmPassword}
               onChange={(e) => updateField('confirmPassword', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               required
             />
           </div>
@@ -126,7 +126,7 @@ export default function RegisterPage() {
                 type="text"
                 value={formData.school}
                 onChange={(e) => updateField('school', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               />
             </div>
             <div>
@@ -135,7 +135,7 @@ export default function RegisterPage() {
                 type="text"
                 value={formData.major}
                 onChange={(e) => updateField('major', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               />
             </div>
           </div>
@@ -145,20 +145,20 @@ export default function RegisterPage() {
               type="number"
               value={formData.graduationYear}
               onChange={(e) => updateField('graduationYear', parseInt(e.target.value))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+            className="w-full bg-slate-800 text-white py-2.5 rounded-lg hover:bg-slate-700 disabled:opacity-50 transition font-medium"
           >
             {loading ? '注册中...' : '注册'}
           </button>
         </form>
         <p className="text-center text-sm text-gray-600 mt-4">
           已有账号？{' '}
-          <Link href="/auth/login" className="text-indigo-600 hover:underline">
+          <Link href="/auth/login" className="text-amber-600 hover:underline font-medium">
             登录
           </Link>
         </p>

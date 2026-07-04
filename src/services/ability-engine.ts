@@ -19,7 +19,7 @@ export async function calculateAbilityScores(userId: string) {
     if (p.outcomeType) weight += 0.2;
     return acc + weight;
   }, 0);
-  const allTechStacks = new Set<string>();
+  const allTechs = new Set<string>();
   projects.forEach(p => {
     if (p.techStack) {
       try {

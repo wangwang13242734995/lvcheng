@@ -120,7 +120,7 @@ export default function NewProjectPage() {
               type="text"
               value={form.title}
               onChange={(e) => updateField('title', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               required
             />
           </div>
@@ -130,7 +130,7 @@ export default function NewProjectPage() {
               <select
                 value={form.type}
                 onChange={(e) => updateField('type', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               >
                 {projectTypes.map((t) => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -143,7 +143,7 @@ export default function NewProjectPage() {
                 type="text"
                 value={form.role}
                 onChange={(e) => updateField('role', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                 placeholder="如：前端开发、项目经理"
               />
             </div>
@@ -155,7 +155,7 @@ export default function NewProjectPage() {
                 type="number"
                 value={form.teamSize}
                 onChange={(e) => updateField('teamSize', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                 min={1}
               />
             </div>
@@ -165,7 +165,7 @@ export default function NewProjectPage() {
                 type="date"
                 value={form.startDate}
                 onChange={(e) => updateField('startDate', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               />
             </div>
             <div>
@@ -174,7 +174,7 @@ export default function NewProjectPage() {
                 type="date"
                 value={form.endDate}
                 onChange={(e) => updateField('endDate', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               />
             </div>
           </div>
@@ -189,18 +189,18 @@ export default function NewProjectPage() {
               value={techInput}
               onChange={(e) => setTechInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTech(); } }}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="flex-1 px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               placeholder="输入技术名称，按回车添加"
             />
-            <button type="button" onClick={addTech} className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+            <button type="button" onClick={addTech} className="px-4 py-2 bg-slate-100 rounded-lg hover:bg-slate-200 text-sm text-slate-700">
               添加
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
             {techStack.map((tech) => (
-              <span key={tech} className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center gap-1">
+              <span key={tech} className="bg-slate-800 text-white px-3 py-1 rounded-full text-sm flex items-center gap-1">
                 {tech}
-                <button type="button" onClick={() => removeTech(tech)} className="text-indigo-400 hover:text-indigo-600">×</button>
+                <button type="button" onClick={() => removeTech(tech)} className="text-slate-400 hover:text-white">×</button>
               </span>
             ))}
           </div>
@@ -214,7 +214,7 @@ export default function NewProjectPage() {
             <textarea
               value={form.description}
               onChange={(e) => updateField('description', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               rows={3}
               placeholder="简要描述项目内容和目标"
             />
@@ -225,7 +225,7 @@ export default function NewProjectPage() {
               type="text"
               value={form.difficulty}
               onChange={(e) => updateField('difficulty', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               placeholder="如：使用了不熟悉的框架、时间紧迫等"
             />
           </div>
@@ -241,7 +241,7 @@ export default function NewProjectPage() {
             <textarea
               value={form.difficultyEncountered}
               onChange={(e) => updateField('difficultyEncountered', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               rows={3}
               maxLength={200}
               placeholder="描述你在项目中遇到的最大挑战"
@@ -255,7 +255,7 @@ export default function NewProjectPage() {
             <textarea
               value={form.solution}
               onChange={(e) => updateField('solution', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               rows={3}
               maxLength={200}
               placeholder="描述你的解决方案和过程"
@@ -273,7 +273,7 @@ export default function NewProjectPage() {
               <select
                 value={form.outcomeType}
                 onChange={(e) => updateField('outcomeType', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               >
                 {outcomeTypes.map((t) => (
                   <option key={t.value} value={t.value}>{t.label}</option>
@@ -286,7 +286,7 @@ export default function NewProjectPage() {
                 type="text"
                 value={form.outcome}
                 onChange={(e) => updateField('outcome', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                 placeholder="如：获得一等奖、DAU达到1000"
               />
             </div>
@@ -312,7 +312,7 @@ export default function NewProjectPage() {
                 type="url"
                 value={link.url}
                 onChange={(e) => updateLink(index, 'url', e.target.value)}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
                 placeholder="https://..."
               />
               <button type="button" onClick={() => removeLink(index)} className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg">
@@ -320,7 +320,7 @@ export default function NewProjectPage() {
               </button>
             </div>
           ))}
-          <button type="button" onClick={addLink} className="text-indigo-600 hover:text-indigo-700 text-sm">
+          <button type="button" onClick={addLink} className="text-slate-700 hover:text-slate-900 text-sm font-medium">
             + 添加链接
           </button>
         </div>
@@ -330,14 +330,14 @@ export default function NewProjectPage() {
           <button
             type="button"
             onClick={() => router.push('/projects')}
-            className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="px-6 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-700"
           >
             取消
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:opacity-50"
+            className="px-6 py-2.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 disabled:opacity-50 transition font-medium"
           >
             {loading ? '保存中...' : '保存项目'}
           </button>

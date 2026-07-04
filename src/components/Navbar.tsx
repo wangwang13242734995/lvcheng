@@ -9,21 +9,21 @@ export default function Navbar() {
   return (
     <nav className="bg-white border-b border-gray-200">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-indigo-600">
+        <Link href="/" className="text-xl font-bold text-slate-800 tracking-wide">
           履程
         </Link>
         <div className="flex items-center gap-4">
           {session ? (
             <>
-              <Link href="/dashboard" className="text-gray-600 hover:text-indigo-600">
+              <Link href="/dashboard" className="text-slate-600 hover:text-slate-900 transition">
                 仪表盘
               </Link>
-              <Link href="/projects" className="text-gray-600 hover:text-indigo-600">
+              <Link href="/projects" className="text-slate-600 hover:text-slate-900 transition">
                 项目
               </Link>
               <Link
                 href={`/profile/${(session.user as any)?.id}`}
-                className="text-gray-600 hover:text-indigo-600"
+                className="text-slate-600 hover:text-slate-900 transition"
               >
                 名片
               </Link>
@@ -37,12 +37,12 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link href="/auth/login" className="text-gray-600 hover:text-indigo-600">
+              <Link href="/auth/login" className="text-slate-600 hover:text-slate-900 transition">
                 登录
               </Link>
               <Link
                 href="/auth/register"
-                className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+                className="bg-slate-800 text-white px-5 py-2 rounded-lg hover:bg-slate-700 transition text-sm font-medium"
               >
                 注册
               </Link>

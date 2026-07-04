@@ -16,8 +16,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "履程 - 记录成长，看见能力",
-  description: "大学生能力成长追踪平台",
+  title: "履程 · 能力平权，公平展示",
+  description: "不看出身，只看能力。六维能力模型量化你的真实实力。",
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}
       >
         <Providers>
           <Navbar />

@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: error.errors[0].message },
+        { error: (error as z.ZodError).issues[0]?.message || '参数错误' },
         { status: 400 }
       );
     }

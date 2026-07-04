@@ -37,7 +37,7 @@ export default function ProjectsPage() {
         <h1 className="text-2xl font-bold text-gray-900">我的项目</h1>
         <Link
           href="/projects/new"
-          className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
+          className="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition text-sm font-medium"
         >
           + 新项目
         </Link>
@@ -46,7 +46,7 @@ export default function ProjectsPage() {
       {projects.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-xl">
           <p className="text-gray-500 mb-4">还没有项目记录</p>
-          <Link href="/projects/new" className="text-indigo-600 hover:underline">
+          <Link href="/projects/new" className="text-amber-600 hover:underline font-medium">
             记录第一个项目
           </Link>
         </div>
@@ -66,7 +66,7 @@ export default function ProjectsPage() {
                   {project.status === 'PUBLISHED' ? '已发布' : '草稿'}
                 </span>
               </div>
-              <span className="text-xs bg-indigo-50 text-indigo-600 px-2 py-1 rounded">
+              <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded">
                 {typeLabels[project.type] || project.type}
               </span>
               {project.description && (

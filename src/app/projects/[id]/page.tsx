@@ -38,7 +38,7 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link href="/projects" className="text-indigo-600 hover:underline text-sm mb-4 inline-block">
+      <Link href="/projects" className="text-slate-600 hover:text-slate-900 text-sm mb-4 inline-block transition">
         ← 返回项目列表
       </Link>
 
@@ -47,7 +47,7 @@ export default function ProjectDetailPage() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{project.title}</h1>
             <div className="flex gap-2 mt-2">
-              <span className="text-sm bg-indigo-50 text-indigo-600 px-2 py-1 rounded">
+              <span className="text-sm bg-slate-100 text-slate-600 px-2 py-1 rounded">
                 {typeLabels[project.type] || project.type}
               </span>
               <span className={`text-sm px-2 py-1 rounded ${
@@ -122,7 +122,7 @@ export default function ProjectDetailPage() {
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-indigo-600 hover:underline block"
+                  className="text-slate-700 hover:text-slate-900 block transition"
                 >
                   {link.type}: {link.url}
                 </a>
