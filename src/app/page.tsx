@@ -1,6 +1,18 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function HomePage() {
+  const [stats, setStats] = useState({ userCount: 0, projectCount: 0, recordCount: 0 });
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(r => r.json())
+      .then(setStats)
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="bg-white">
       {/* Hero Section */}
@@ -29,6 +41,28 @@ export default function HomePage() {
           >
             登录
           </Link>
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section className="pb-12">
+        <div className="max-w-2xl mx-auto px-4">
+          <div className="flex justify-center gap-8">
+            <div className="text-center">
+              <p className="text-3xl font-bold text-slate-800">{stats.userCount}</p>
+              <p className="text-xs text-slate-400 mt-1">注册用户</p>
+            </div>
+            <div className="w-px bg-slate-200" />
+            <div className="text-center">
+              <p className="text-3xl font-bold text-slate-800">{stats.projectCount}</p>
+              <p className="text-xs text-slate-400 mt-1">项目记录</p>
+            </div>
+            <div className="w-px bg-slate-200" />
+            <div className="text-center">
+              <p className="text-3xl font-bold text-slate-800">{stats.recordCount}</p>
+              <p className="text-xs text-slate-400 mt-1">成长轨迹</p>
+            </div>
+          </div>
         </div>
       </section>
 

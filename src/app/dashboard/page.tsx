@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import AbilityRadarChart from '@/components/AbilityRadarChart';
 import ShareCard from '@/components/ShareCard';
+import AchievementPanel from '@/components/AchievementPanel';
 
 interface DashboardData {
   score: {
@@ -152,6 +153,14 @@ export default function DashboardPage() {
             </Link>
           </p>
         )}
+      </div>
+
+      {/* 成就系统 */}
+      <div className="mt-8">
+        <AchievementPanel
+          scores={scores}
+          projectCount={data?.projects?.length || 0}
+        />
       </div>
 
       {/* 分享卡片 */}
