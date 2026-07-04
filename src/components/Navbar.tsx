@@ -21,6 +21,9 @@ export default function Navbar() {
               <Link href="/projects" className="text-slate-600 hover:text-slate-900 transition">
                 项目
               </Link>
+              <Link href="/weekly-review" className="text-slate-600 hover:text-slate-900 transition">
+                周复盘
+              </Link>
               <Link
                 href={`/profile/${(session.user as any)?.id}`}
                 className="text-slate-600 hover:text-slate-900 transition"

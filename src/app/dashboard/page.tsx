@@ -88,6 +88,21 @@ export default function DashboardPage() {
         </Link>
       </div>
 
+      {/* Weekly Review Quick Access */}
+      <Link
+        href="/weekly-review"
+        className="block bg-gradient-to-r from-amber-50 to-white p-5 rounded-xl border border-amber-100 mb-6 hover:shadow-sm transition"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">📊</span>
+          <div>
+            <h3 className="font-semibold text-slate-900 text-sm">本周复盘</h3>
+            <p className="text-xs text-slate-500">看看这周你的能力变化</p>
+          </div>
+          <span className="ml-auto text-amber-600 text-sm">查看 →</span>
+        </div>
+      </Link>
+
       <div className="grid md:grid-cols-2 gap-6 mb-8">
         {/* Radar Chart */}
         <div className="bg-white p-6 rounded-xl">
