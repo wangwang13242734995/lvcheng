@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
-import { calculateAbilityScores } from '@/services/ability-engine';
+import { calculateAbilityScores, getLatestAbilityScore } from '@/services/ability-engine';
 
 const projectSchema = z.object({
   title: z.string().min(1, '请输入项目名称'),
@@ -72,6 +72,9 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Get old scores before recalculation
+    const oldScores = await getLatestAbilityScore(userId);
+
     // Create growth record for the project
     await prisma.growthRecord.create({
       data: {
@@ -87,7 +90,21 @@ export async function POST(req: NextRequest) {
     // Recalculate ability scores
     await calculateAbilityScores(userId);
 
-    return NextResponse.json(project, { status: 201 });
+    // Get new scores after recalculation
+    const newScores = await getLatestAbilityScore(userId);
+
+    // Calculate score changes
+    const scoreChanges = newScores && oldScores ? {
+      craft: newScores.craft - oldScores.craft,
+      learn: newScores.learn - oldScores.learn,
+      drive: newScores.drive - oldScores.drive,
+      team: newScores.team - oldScores.team,
+      grit: newScores.grit - oldScores.grit,
+      express: newScores.express - oldScores.express,
+      totalScore: newScores.totalScore - oldScores.totalScore,
+    } : null;
+
+    return NextResponse.json({ project, scoreChanges, newScores }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 
 export default function RegisterPage() {
@@ -57,7 +58,18 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push('/auth/login?registered=true');
+      // 注册成功后自动登录并跳转到引导页
+      const loginRes = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+
+      if (loginRes?.ok) {
+        router.push('/onboarding');
+      } else {
+        router.push('/auth/login?registered=true');
+      }
     } catch {
       setError('网络错误，请稍后重试');
       setLoading(false);

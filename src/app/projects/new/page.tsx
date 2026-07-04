@@ -26,6 +26,10 @@ export default function NewProjectPage() {
   const [techInput, setTechInput] = useState('');
   const [techStack, setTechStack] = useState<string[]>([]);
   const [links, setLinks] = useState<{ type: string; url: string }[]>([]);
+  const [scoreResult, setScoreResult] = useState<{
+    scoreChanges: Record<string, number>;
+    newScores: Record<string, number>;
+  } | null>(null);
 
   const [form, setForm] = useState({
     title: '',
@@ -96,7 +100,15 @@ export default function NewProjectPage() {
         return;
       }
 
-      router.push('/projects');
+      // 显示分数变化反馈
+      if (data.scoreChanges) {
+        setScoreResult({
+          scoreChanges: data.scoreChanges,
+          newScores: data.newScores,
+        });
+      } else {
+        router.push('/projects');
+      }
     } catch {
       setError('网络错误');
       setLoading(false);
@@ -108,6 +120,67 @@ export default function NewProjectPage() {
       <h1 className="text-2xl font-bold mb-6">记录新项目</h1>
       {error && (
         <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">{error}</div>
+      )}
+
+      {/* 分数变化反馈 */}
+      {scoreResult && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center">
+            <span className="text-4xl">🎉</span>
+            <h2 className="text-xl font-bold text-slate-900 mt-4 mb-2">项目已记录！</h2>
+            <p className="text-slate-500 text-sm mb-6">你的能力分数已更新</p>
+
+            {/* 分数变化 */}
+            <div className="grid grid-cols-3 gap-2 mb-6">
+              {[
+                { key: 'craft', label: '专业力' },
+                { key: 'learn', label: '学习力' },
+                { key: 'drive', label: '自驱力' },
+                { key: 'team', label: '协作力' },
+                { key: 'grit', label: '抗压力' },
+                { key: 'express', label: '表达力' },
+              ].map((item) => {
+                const change = scoreResult.scoreChanges[item.key] || 0;
+                return (
+                  <div key={item.key} className="py-2 bg-slate-50 rounded-lg">
+                    <p className="text-lg font-bold text-slate-800">
+                      {scoreResult.newScores[item.key] || 30}
+                    </p>
+                    {change > 0 && (
+                      <p className="text-xs text-emerald-600 font-medium">+{change}</p>
+                    )}
+                    <p className="text-xs text-slate-500">{item.label}</p>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={() => router.push('/dashboard')}
+                className="w-full py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition font-medium"
+              >
+                查看仪表盘
+              </button>
+              <button
+                onClick={() => {
+                  setScoreResult(null);
+                  setForm({
+                    title: '', type: 'COURSE', role: '', teamSize: 1,
+                    startDate: '', endDate: '', description: '',
+                    difficulty: '', outcome: '', outcomeType: '',
+                    difficultyEncountered: '', solution: '', status: 'DRAFT',
+                  });
+                  setTechStack([]);
+                  setLinks([]);
+                }}
+                className="w-full py-3 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-700 text-sm"
+              >
+                继续记录项目
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
