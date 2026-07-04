@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String
+  email          String    @unique
+  password       String
+  role           String    @default("STUDENT")
+  avatar         String?
+  school         String?
+  major          String?
+  graduationYear Int?
+  bio            String?
+  skills         String?
+  createdAt      DateTime  @default(now())
+
+  projects       Project[]
+  abilityScores  AbilityScore[]
+  growthRecords  GrowthRecord[]
+  weeklyReports  WeeklyReport[]
+  timeCapsules   TimeCapsule[]
+}
+
+model Project {
+  id                  String   @id @default(cuid())
+  userId              String
+  title               String
+  type                String
+  role                String?
+  teamSize            Int?
+  startDate           DateTime?
+  endDate             DateTime?
+  techStack           String?
+  description         String?
+  difficulty          String?
+  outcome             String?
+  outcomeType         String?
+  outcomeData         String?
+  difficultyEncountered String?
+  solution            String?
+  links               String?
+  attachments         String?
+  status              String   @default("DRAFT")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user              User     @relation(fields: [userId], references: [id])
+  growthRecords     GrowthRecord[]
+}
+
+model AbilityScore {
+  id            String   @id @default(cuid())
+  userId        String
+  craft         Int      @default(30)
+  learn         Int      @default(30)
+  drive         Int      @default(30)
+  team          Int      @default(30)
+  grit          Int      @default(30)
+  express       Int      @default(30)
+  totalScore    Int      @default(30)
+  calculatedAt  DateTime @default(now())
+
+  user          User     @relation(fields: [userId], references: [id])
+}
+
+model GrowthRecord {
+  id              String   @id @default(cuid())
+  userId          String
+  projectId       String?
+  type            String
+  title           String
+  content         String?
+  abilitySignals  String?
+  date            DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id])
+  project         Project? @relation(fields: [projectId], references: [id])
+}
+
+model WeeklyReport {
+  id              String   @id @default(cuid())
+  userId          String
+  weekStart       DateTime
+  weekEnd         DateTime
+  recordCount     Int      @default(0)
+  abilityChanges  String?
+  hoursInvested   Float    @default(0)
+  aiSuggestion    String?
+  generatedAt     DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+model TimeCapsule {
+  id        String    @id @default(cuid())
+  userId    String
+  goal      String
+  writtenAt DateTime  @default(now())
+  openDates String?
+  openedAt  DateTime?
+
+  user      User      @relation(fields: [userId], references: [id])
+}
