@@ -21,19 +21,19 @@ export default function HomePage() {
           能力平权 · 公平展示
         </p>
         <h1 className="text-5xl font-bold text-slate-900 mb-6 leading-tight">
-          不看出身，<br className="sm:hidden" />
-          <span className="text-amber-600">只看能力</span>
+          你的作品，<br className="sm:hidden" />
+          <span className="text-amber-600">比文凭更有说服力</span>
         </h1>
         <p className="text-lg text-slate-500 mb-10 max-w-xl mx-auto leading-relaxed">
-          每一次项目实践，都是能力的积累。履程用六维能力模型，
-          把你的真实实力变成可量化、可展示、可验证的资产。
+          简历上印着学校名字，但真正决定你能走多远的，是你做过什么、解决了什么、成长了多少。
+          履程把你的真实能力变成看得见的数据——不靠背书，靠作品。
         </p>
         <div className="flex gap-4 justify-center">
           <Link
             href="/auth/register"
             className="bg-slate-800 text-white px-8 py-3.5 rounded-lg text-lg font-medium hover:bg-slate-700 transition"
           >
-            免费开始
+            用作品证明自己
           </Link>
           <Link
             href="/auth/login"
@@ -50,90 +50,168 @@ export default function HomePage() {
           <div className="flex justify-center gap-8">
             <div className="text-center">
               <p className="text-3xl font-bold text-slate-800">{stats.userCount}</p>
-              <p className="text-xs text-slate-400 mt-1">注册用户</p>
+              <p className="text-xs text-slate-400 mt-1">用作品说话的人</p>
             </div>
             <div className="w-px bg-slate-200" />
             <div className="text-center">
               <p className="text-3xl font-bold text-slate-800">{stats.projectCount}</p>
-              <p className="text-xs text-slate-400 mt-1">项目记录</p>
+              <p className="text-xs text-slate-400 mt-1">被记录的作品</p>
             </div>
             <div className="w-px bg-slate-200" />
             <div className="text-center">
               <p className="text-3xl font-bold text-slate-800">{stats.recordCount}</p>
-              <p className="text-xs text-slate-400 mt-1">成长轨迹</p>
+              <p className="text-xs text-slate-400 mt-1">可见的成长</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* 痛点 + 解法 */}
       <section className="bg-slate-50 py-20">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-slate-900 mb-4">
-            为什么选择履程？
+            一张纸，装不下真实的你
           </h2>
-          <p className="text-center text-slate-500 mb-12 max-w-lg mx-auto">
-            不是简历工具，不是项目管理器。是你的能力成长银行。
+          <p className="text-center text-slate-500 mb-16 max-w-2xl mx-auto leading-relaxed">
+            简历筛选看学校，面试看学校，第一份工作还是看学校。<br />
+            但你明明知道——真正让你与众不同的，是你熬过的夜、解过的难题、做过的项目。
           </p>
+
           <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white p-7 rounded-xl border border-slate-100">
               <div className="w-12 h-12 bg-amber-50 rounded-lg flex items-center justify-center mb-5">
-                <span className="text-2xl">📊</span>
+                <span className="text-2xl">⚡</span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">六维能力模型</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                数据替你说话
+              </h3>
               <p className="text-slate-500 text-sm leading-relaxed">
-                专业力、学习力、自驱力、协作力、抗压力、表达力。不是别人给你打分，是数据替你说话。
+                六维能力模型不是别人给你打分——是你的项目数量、困难复杂度、成长斜率自动算出来的。
+                <strong className="text-slate-700">你的专业力是42还是78，不取决于谁的印象，取决于你做了什么。</strong>
               </p>
             </div>
             <div className="bg-white p-7 rounded-xl border border-slate-100">
               <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center mb-5">
-                <span className="text-2xl">📝</span>
+                <span className="text-2xl">🔗</span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">结构化记录</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                作品可以验证
+              </h3>
               <p className="text-slate-500 text-sm leading-relaxed">
-                课程作业、比赛、实习、个人项目。不只记录做了什么，更记录你怎么克服困难的。
+                每个项目都带着证据——代码链接、上线产品、获奖证明、量化数据。
+                <strong className="text-slate-700">不是你说你厉害，是你的作品证明你厉害。</strong>
+                这是简历做不到的。
               </p>
             </div>
             <div className="bg-white p-7 rounded-xl border border-slate-100">
               <div className="w-12 h-12 bg-violet-50 rounded-lg flex items-center justify-center mb-5">
-                <span className="text-2xl">🚀</span>
+                <span className="text-2xl">📈</span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">成长可视化</h3>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                成长看得见
+              </h3>
               <p className="text-slate-500 text-sm leading-relaxed">
-                雷达图、时间线、成长斜率。生成可分享的能力名片，让进步被看见。
+                你的能力不是一天练成的，但简历上只有一个结果。
+                <strong className="text-slate-700">履程记录的是过程——从30分到70分的成长轨迹，比任何证书都有说服力。</strong>
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 对比区 */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">
+            简历 vs 履程
+          </h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* 简历 */}
+            <div className="p-6 rounded-xl border border-slate-200 bg-slate-50">
+              <h3 className="font-semibold text-slate-400 mb-4 text-sm uppercase tracking-wider">传统简历</h3>
+              <ul className="space-y-3 text-sm text-slate-500">
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-300 mt-0.5">✕</span>
+                  <span>学校名字排在最前面</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-300 mt-0.5">✕</span>
+                  <span>项目经历只有一行描述</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-300 mt-0.5">✕</span>
+                  <span>无法证明你说的是真的</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-300 mt-0.5">✕</span>
+                  <span>看不到你的成长过程</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-slate-300 mt-0.5">✕</span>
+                  <span>所有人格式一样，无法区分</span>
+                </li>
+              </ul>
+            </div>
+            {/* 履程 */}
+            <div className="p-6 rounded-xl border border-amber-200 bg-amber-50/30">
+              <h3 className="font-semibold text-amber-700 mb-4 text-sm uppercase tracking-wider">履程名片</h3>
+              <ul className="space-y-3 text-sm text-slate-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">✓</span>
+                  <span><strong>能力分数</strong>排在最前面，学校只是小字</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">✓</span>
+                  <span>每个项目有<strong>困难+解决+成果</strong>完整故事</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">✓</span>
+                  <span>代码链接、量化数据、获奖证明<strong>可验证</strong></span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">✓</span>
+                  <span>六维雷达图展示<strong>成长轨迹</strong>和斜率</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">✓</span>
+                  <span>每个人的名片都是<strong>独一无二</strong>的能力画像</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </section>
 
       {/* How it works */}
-      <section className="py-20">
+      <section className="bg-slate-50 py-20">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">
-            两步开始
+          <h2 className="text-3xl font-bold text-center text-slate-900 mb-4">
+            2分钟，让能力替你说话
           </h2>
+          <p className="text-center text-slate-500 mb-12">
+            不需要写简历，不需要编故事。你只需要记录你做过的事。
+          </p>
           <div className="grid md:grid-cols-3 gap-8 text-center">
             <div>
               <div className="w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 1
               </div>
-              <h3 className="text-base font-semibold text-slate-900 mb-2">注册账号</h3>
-              <p className="text-sm text-slate-500">30秒完成，无需信用卡</p>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">注册</h3>
+              <p className="text-sm text-slate-500">30秒，填个名字就行</p>
             </div>
             <div>
               <div className="w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 2
               </div>
-              <h3 className="text-base font-semibold text-slate-900 mb-2">记录项目</h3>
-              <p className="text-sm text-slate-500">结构化记录，自动生成能力画像</p>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">记录一个项目</h3>
+              <p className="text-sm text-slate-500">做了什么、遇到什么困难、怎么解决的</p>
             </div>
             <div>
               <div className="w-14 h-14 bg-amber-500 text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 3
               </div>
-              <h3 className="text-base font-semibold text-slate-900 mb-2">分享名片</h3>
-              <p className="text-sm text-slate-500">让能力替你说话，不靠学历背书</p>
+              <h3 className="text-base font-semibold text-slate-900 mb-2">拿到你的名片</h3>
+              <p className="text-sm text-slate-500">六维雷达图自动生成，分享出去</p>
             </div>
           </div>
         </div>
@@ -143,16 +221,17 @@ export default function HomePage() {
       <section className="bg-slate-900 py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            你的能力，值得被看见
+            别让学校名字定义你
           </h2>
           <p className="text-slate-400 mb-8 max-w-lg mx-auto">
-            不管你在哪个学校，不管你是什么背景。用数据证明自己的实力。
+            985的学生可能什么都没做过，普通本科的学生可能已经上线了3个产品。
+            <br />在这里，作品说了算。
           </p>
           <Link
             href="/auth/register"
             className="inline-block bg-amber-500 text-slate-900 px-8 py-3.5 rounded-lg text-lg font-semibold hover:bg-amber-400 transition"
           >
-            立即开始 →
+            用作品证明自己 →
           </Link>
         </div>
       </section>
@@ -160,7 +239,7 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-slate-950 text-slate-500 py-8">
         <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-sm">© 2026 履程 · 能力平权，公平展示</p>
+          <p className="text-sm">© 2026 履程 · 作品胜过文凭</p>
         </div>
       </footer>
     </div>
