@@ -33,16 +33,16 @@ export default function AbilityRadarChart({ scores }: AbilityRadarChartProps) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <RadarChart data={data}>
-        <PolarGrid />
-        <PolarAngleAxis dataKey="subject" className="text-sm" />
-        <PolarRadiusAxis angle={30} domain={[0, 100]} />
+        <PolarGrid stroke="#E2E8F0" />
+        <PolarAngleAxis dataKey="subject" tick={{ fill: '#475569', fontSize: 12, fontWeight: 500 }} />
+        <PolarRadiusAxis angle={30} domain={[0, 100]} tick={{ fill: '#94A3B8', fontSize: 10 }} axisLine={false} />
         <Radar
           name="能力值"
           dataKey="value"
-          stroke="#1E293B"
-          fill="#1E293B"
-          fillOpacity={0.15}
-          strokeWidth={2}
+          stroke="#16A34A"
+          fill="#16A34A"
+          fillOpacity={0.25}
+          strokeWidth={2.5}
         />
       </RadarChart>
     </ResponsiveContainer>

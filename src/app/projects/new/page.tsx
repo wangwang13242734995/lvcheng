@@ -26,6 +26,9 @@ export default function NewProjectPage() {
   const [techInput, setTechInput] = useState('');
   const [techStack, setTechStack] = useState<string[]>([]);
   const [links, setLinks] = useState<{ type: string; url: string }[]>([]);
+  const [videoUrl, setVideoUrl] = useState('');
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [videoPreview, setVideoPreview] = useState('');
   const [scoreResult, setScoreResult] = useState<{
     scoreChanges: Record<string, number>;
     newScores: Record<string, number>;
@@ -76,6 +79,48 @@ export default function NewProjectPage() {
     setLinks(links.filter((_, i) => i !== index));
   };
 
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 50 * 1024 * 1024) {
+      setError('视频文件不能超过 50MB');
+      return;
+    }
+
+    setVideoUploading(true);
+    setError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || '上传失败');
+        setVideoUploading(false);
+        return;
+      }
+
+      setVideoUrl(data.videoUrl);
+      setVideoPreview(data.videoUrl);
+      setVideoUploading(false);
+    } catch {
+      setError('上传失败，请稍后重试');
+      setVideoUploading(false);
+    }
+  };
+
+  const removeVideo = () => {
+    setVideoUrl('');
+    setVideoPreview('');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -89,6 +134,7 @@ export default function NewProjectPage() {
           ...form,
           techStack,
           links,
+          videoUrl,
           teamSize: parseInt(String(form.teamSize)) || 1,
         }),
       });
@@ -117,9 +163,25 @@ export default function NewProjectPage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">记录新项目</h1>
+      {/* Header */}
+      <div className="bg-gradient-to-br from-green-900 to-green-950 rounded-2xl p-8 mb-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full -translate-y-8 translate-x-8" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-orange-500/10 rounded-full translate-y-6 -translate-x-6" />
+        <div className="relative">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
+              <span className="text-xl">✨</span>
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">记录新项目</h1>
+              <p className="text-slate-400 text-sm">每一个作品都是你能力的证明</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">{error}</div>
+        <div className="bg-red-50 text-red-600 p-4 rounded-2xl mb-4 text-sm border border-red-100">{error}</div>
       )}
 
       {/* 分数变化反馈 */}
@@ -183,10 +245,15 @@ export default function NewProjectPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* Basic Info */}
-        <div className="bg-white p-6 rounded-xl space-y-4">
-          <h2 className="text-lg font-semibold">基本信息</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
+              <span className="text-sm">📋</span>
+            </div>
+            <h2 className="text-base font-semibold text-slate-800">基本信息</h2>
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">项目名称 *</label>
             <input
@@ -254,8 +321,13 @@ export default function NewProjectPage() {
         </div>
 
         {/* Tech Stack */}
-        <div className="bg-white p-6 rounded-xl space-y-4">
-          <h2 className="text-lg font-semibold">技术栈 / 工具</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center">
+              <span className="text-sm">🛠</span>
+            </div>
+            <h2 className="text-base font-semibold text-slate-800">技术栈 / 工具</h2>
+          </div>
           <div className="flex gap-2">
             <input
               type="text"
@@ -280,8 +352,13 @@ export default function NewProjectPage() {
         </div>
 
         {/* Description */}
-        <div className="bg-white p-6 rounded-xl space-y-4">
-          <h2 className="text-lg font-semibold">项目描述</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <span className="text-sm">📝</span>
+            </div>
+            <h2 className="text-base font-semibold text-slate-800">项目描述</h2>
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">项目简介</label>
             <textarea
@@ -305,8 +382,13 @@ export default function NewProjectPage() {
         </div>
 
         {/* Difficulty & Solution */}
-        <div className="bg-white p-6 rounded-xl space-y-4">
-          <h2 className="text-lg font-semibold">困难与解决</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+              <span className="text-sm">⚡</span>
+            </div>
+            <h2 className="text-base font-semibold text-slate-800">困难与解决</h2>
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               遇到的最大困难 <span className="text-gray-400">(50-200字)</span>
@@ -338,8 +420,13 @@ export default function NewProjectPage() {
         </div>
 
         {/* Outcome */}
-        <div className="bg-white p-6 rounded-xl space-y-4">
-          <h2 className="text-lg font-semibold">项目成果</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+              <span className="text-sm">🏆</span>
+            </div>
+            <h2 className="text-base font-semibold text-slate-800">项目成果</h2>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">成果类型</label>
@@ -366,9 +453,69 @@ export default function NewProjectPage() {
           </div>
         </div>
 
+        {/* Video */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+              <span className="text-sm">🎬</span>
+            </div>
+            <h2 className="text-base font-semibold text-slate-800">项目视频</h2>
+            <span className="text-xs text-slate-400 ml-auto">可选，展示你的作品更有说服力</span>
+          </div>
+          {videoPreview ? (
+            <div className="space-y-3">
+              <video
+                src={videoPreview}
+                controls
+                className="w-full rounded-lg bg-slate-900 max-h-64"
+              />
+              <div className="flex items-center justify-between">
+                <p className="text-sm text-emerald-600">✓ 视频已上传</p>
+                <button
+                  type="button"
+                  onClick={removeVideo}
+                  className="text-sm text-red-500 hover:text-red-700"
+                >
+                  移除视频
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <label className="block border-2 border-dashed border-slate-200 rounded-xl p-8 text-center cursor-pointer hover:border-indigo-300 hover:bg-indigo-50/30 transition">
+                <input
+                  type="file"
+                  accept="video/mp4,video/webm,video/quicktime,video/x-msvideo"
+                  onChange={handleVideoUpload}
+                  className="hidden"
+                  disabled={videoUploading}
+                />
+                {videoUploading ? (
+                  <div className="space-y-2">
+                    <div className="w-10 h-10 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                    <p className="text-sm text-slate-500">上传中...</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <span className="text-3xl">🎬</span>
+                    <p className="text-sm font-medium text-slate-700">点击上传项目演示视频</p>
+                    <p className="text-xs text-slate-400">支持 MP4、WebM、MOV，最大 50MB</p>
+                  </div>
+                )}
+              </label>
+              <p className="text-xs text-slate-400">💡 有视频的项目更能体现表达能力，企业也更关注</p>
+            </div>
+          )}
+        </div>
+
         {/* Links */}
-        <div className="bg-white p-6 rounded-xl space-y-4">
-          <h2 className="text-lg font-semibold">相关链接</h2>
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <span className="text-sm">🔗</span>
+            </div>
+            <h2 className="text-base font-semibold text-slate-800">相关链接</h2>
+          </div>
           {links.map((link, index) => (
             <div key={index} className="flex gap-2">
               <select
@@ -399,18 +546,18 @@ export default function NewProjectPage() {
         </div>
 
         {/* Submit */}
-        <div className="flex gap-4 justify-end">
+        <div className="flex gap-4 justify-end pt-2">
           <button
             type="button"
             onClick={() => router.push('/projects')}
-            className="px-6 py-2.5 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-700"
+            className="px-6 py-2.5 border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-700 transition"
           >
             取消
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2.5 bg-slate-800 text-white rounded-lg hover:bg-slate-700 disabled:opacity-50 transition font-medium"
+            className="px-6 py-2.5 bg-gradient-to-r from-green-900 to-green-950 text-white rounded-xl hover:opacity-90 disabled:opacity-50 transition font-medium shadow-sm"
           >
             {loading ? '保存中...' : '保存项目'}
           </button>

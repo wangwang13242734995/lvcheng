@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  /* 履程设计系统 */
-  --primary: #1E293B;       /* 石墨蓝 - 主色 */
-  --accent: #6366F1;        /* 靛蓝 - 交互色 */
-  --achievement: #F59E0B;   /* 琥珀金 - 成就/分数 */
-  --success: #10B981;       /* 翡翠绿 - 成功/增长 */
+  /* 履程设计系统 - 森林绿+暖橙 */
+  --primary: #14532D;       /* 森林绿 - 主色 */
+  --accent: #16A34A;        /* 草绿 - 交互色 */
+  --achievement: #EA580C;   /* 暖橙 - 成就/分数 */
+  --success: #0EA5E9;       /* 天蓝 - 成功/增长 */
   --bg: #FAFAFA;            /* 浅灰背景 */
   --card: #FFFFFF;          /* 卡片背景 */
-  --text-primary: #1E293B;  /* 主文字 */
+  --text-primary: #14532D;  /* 主文字 */
   --text-secondary: #64748B;/* 次要文字 */
   --text-muted: #94A3B8;    /* 弱化文字 */
   --border: #E2E8F0;        /* 边框 */
@@ -38,33 +38,6 @@ body {
 .score-highlight {
   color: var(--achievement);
   font-weight: 700;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-}
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 @layer utilities {

@@ -12,9 +12,6 @@ export default function RegisterPage() {
     email: '',
     password: '',
     confirmPassword: '',
-    school: '',
-    major: '',
-    graduationYear: new Date().getFullYear() + 2,
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -44,9 +41,6 @@ export default function RegisterPage() {
           email: formData.email,
           password: formData.password,
           role: 'STUDENT',
-          school: formData.school,
-          major: formData.major,
-          graduationYear: formData.graduationYear,
         }),
       });
 
@@ -81,96 +75,88 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-8">
-      <div className="bg-white p-8 rounded-xl w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-slate-900 mb-6">注册履程</h1>
+    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-8 bg-gradient-to-br from-green-900 via-green-950 to-slate-900">
+      {/* 装饰元素 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="w-96 h-96 bg-green-500/5 rounded-full -top-48 -right-48 absolute" />
+        <div className="w-64 h-64 bg-orange-500/5 rounded-full -bottom-32 -left-32 absolute" />
+      </div>
+
+      <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-xl relative z-10">
+        {/* 品牌标识 */}
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 bg-gradient-to-br from-green-900 to-green-950 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl font-bold">履</span>
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900">加入履程</h1>
+          <p className="text-slate-500 text-sm mt-1">30秒注册，立即生成你的能力名片</p>
+        </div>
+
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
+          <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm flex items-center gap-2">
+            <span>⚠️</span>
             {error}
           </div>
         )}
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">姓名 *</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">姓名 *</label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => updateField('name', e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              placeholder="你的名字"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">邮箱 *</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">邮箱 *</label>
             <input
               type="email"
               value={formData.email}
               onChange={(e) => updateField('email', e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              placeholder="your@email.com"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">密码 *</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">密码 *</label>
             <input
               type="password"
               value={formData.password}
               onChange={(e) => updateField('password', e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              placeholder="至少6位密码"
               required
               minLength={6}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">确认密码 *</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">确认密码 *</label>
             <input
               type="password"
               value={formData.confirmPassword}
               onChange={(e) => updateField('confirmPassword', e.target.value)}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+              placeholder="再输入一次密码"
               required
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">学校</label>
-              <input
-                type="text"
-                value={formData.school}
-                onChange={(e) => updateField('school', e.target.value)}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">专业</label>
-              <input
-                type="text"
-                value={formData.major}
-                onChange={(e) => updateField('major', e.target.value)}
-                className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">毕业年份</label>
-            <input
-              type="number"
-              value={formData.graduationYear}
-              onChange={(e) => updateField('graduationYear', parseInt(e.target.value))}
-              className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-slate-800 text-white py-2.5 rounded-lg hover:bg-slate-700 disabled:opacity-50 transition font-medium"
+            className="w-full bg-gradient-to-r from-green-900 to-green-950 text-white py-2.5 rounded-xl hover:from-green-800 hover:to-green-900 disabled:opacity-50 transition font-medium shadow-sm"
           >
             {loading ? '注册中...' : '注册'}
           </button>
         </form>
-        <p className="text-center text-sm text-gray-600 mt-4">
+
+        <p className="text-center text-sm text-slate-500 mt-6">
           已有账号？{' '}
-          <Link href="/auth/login" className="text-amber-600 hover:underline font-medium">
+          <Link href="/auth/login" className="text-orange-600 hover:underline font-medium">
             登录
           </Link>
         </p>

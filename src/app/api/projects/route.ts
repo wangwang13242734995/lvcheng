@@ -21,6 +21,7 @@ const projectSchema = z.object({
   difficultyEncountered: z.string().max(200).optional(),
   solution: z.string().max(200).optional(),
   links: z.array(z.object({ type: z.string(), url: z.string() })).optional(),
+  videoUrl: z.string().optional(),
   status: z.enum(['DRAFT', 'PUBLISHED']).default('DRAFT'),
 });
 
@@ -68,6 +69,7 @@ export async function POST(req: NextRequest) {
         difficultyEncountered: data.difficultyEncountered,
         solution: data.solution,
         links: data.links ? JSON.stringify(data.links) : null,
+        videoUrl: data.videoUrl || null,
         status: data.status,
       },
     });

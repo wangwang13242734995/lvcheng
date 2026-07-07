@@ -179,7 +179,7 @@ export default function OnboardingPage() {
                 { label: '表达力', value: scores?.express || 30 },
               ].map((item) => (
                 <div key={item.label} className="py-2 bg-slate-50 rounded-lg">
-                  <p className="text-lg font-bold text-amber-600">{item.value}</p>
+                  <p className="text-lg font-bold text-orange-600">{item.value}</p>
                   <p className="text-xs text-slate-500">{item.label}</p>
                 </div>
               ))}
@@ -188,7 +188,7 @@ export default function OnboardingPage() {
             <div className="space-y-3">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="w-full py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition font-medium"
+                className="w-full py-3 bg-green-900 text-white rounded-lg hover:bg-green-800 transition font-medium"
               >
                 进入仪表盘 →
               </button>

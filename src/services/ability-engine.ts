@@ -56,11 +56,13 @@ export async function calculateAbilityScores(userId: string) {
   const completionRate = projectCount > 0 ? completedProjects / projectCount : 0;
   const grit = clamp(30 + gritRatio * 30 + completionRate * 20 + projectsWithDifficulty * 5);
 
-  // 表达力 (Express): 记录的结构化程度 + 描述清晰度
+  // 表达力 (Express): 记录的结构化程度 + 描述清晰度 + 视频展示
   const projectsWithDesc = projects.filter(p => p.description && p.description.length > 50).length;
   const descRatio = projectCount > 0 ? projectsWithDesc / projectCount : 0;
   const structuredRecords = growthRecords.filter(r => r.content && r.content.length > 30).length;
-  const express = clamp(30 + descRatio * 25 + structuredRecords * 3 + (projectsWithDesc > 0 ? 10 : 0));
+  const projectsWithVideo = projects.filter(p => p.videoUrl).length;
+  const videoBonus = projectsWithVideo * 8; // 有视频的项目每个加 8 分
+  const express = clamp(30 + descRatio * 25 + structuredRecords * 3 + (projectsWithDesc > 0 ? 10 : 0) + videoBonus);
 
   const totalScore = Math.round((craft + learn + drive + team + grit + express) / 6);
 

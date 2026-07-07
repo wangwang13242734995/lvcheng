@@ -47,13 +47,13 @@ export default function ShareCard({ userName, scores, projectCount, growthCount 
       >
         {/* 头部 */}
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-14 h-14 bg-slate-800 rounded-full flex items-center justify-center text-xl text-white font-bold">
+          <div className="w-14 h-14 bg-green-900 rounded-full flex items-center justify-center text-xl text-white font-bold">
             {userName?.[0] || '?'}
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900">{userName}</h3>
             <div className="flex items-center gap-2">
-              <span className="text-amber-600 font-bold text-lg">{scores.totalScore || 30}</span>
+              <span className="text-orange-600 font-bold text-lg">{scores.totalScore || 30}</span>
               <span className="text-xs text-slate-400">综合得分</span>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function ShareCard({ userName, scores, projectCount, growthCount 
             { label: '表达力', value: scores.express },
           ].map((item) => (
             <div key={item.label} className="text-center py-2 bg-slate-50 rounded-lg">
-              <p className="text-lg font-bold text-amber-600">{item.value}</p>
+              <p className="text-lg font-bold text-orange-600">{item.value}</p>
               <p className="text-xs text-slate-500">{item.label}</p>
             </div>
           ))}
@@ -107,7 +107,7 @@ export default function ShareCard({ userName, scores, projectCount, growthCount 
       {/* 下载按钮 */}
       <button
         onClick={handleDownload}
-        className="w-full py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition font-medium text-sm"
+        className="w-full py-3 bg-green-900 text-white rounded-lg hover:bg-green-800 transition font-medium text-sm"
       >
         保存为图片
       </button>
