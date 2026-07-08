@@ -282,9 +282,47 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-950 text-slate-500 py-8">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-sm">© 2026 履程 · 作品胜过文凭</p>
+      <footer className="bg-slate-950 text-slate-500 py-12">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid sm:grid-cols-3 gap-8 mb-8">
+            <div>
+              <p className="text-white font-semibold mb-3">履程</p>
+              <p className="text-sm leading-relaxed">用作品说话的能力展示平台，让每个人的成长都被看见。</p>
+            </div>
+            <div>
+              <p className="text-white font-semibold mb-3">了解</p>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link href="/about" className="hover:text-white transition">
+                    关于我们
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/challenges" className="hover:text-white transition">
+                    挑战广场
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-white font-semibold mb-3">条款</p>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <Link href="/privacy" className="hover:text-white transition">
+                    隐私政策
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/terms" className="hover:text-white transition">
+                    服务条款
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-slate-800 pt-6 text-center">
+            <p className="text-sm">© 2026 履程 · 作品胜过文凭</p>
+          </div>
         </div>
       </footer>
     </div>

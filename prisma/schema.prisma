@@ -8,28 +8,30 @@ datasource db {
 }
 
 model User {
-  id             String    @id @default(cuid())
-  name           String
-  email          String    @unique
-  password       String
-  role           String    @default("STUDENT")
-  avatar         String?
-  school         String?
-  major          String?
-  graduationYear Int?
-  bio            String?
-  skills         String?
-  createdAt      DateTime  @default(now())
+  id                  String    @id @default(cuid())
+  name                String
+  email               String    @unique
+  password            String
+  role                String    @default("STUDENT")
+  avatar              String?
+  school              String?
+  major               String?
+  graduationYear      Int?
+  bio                 String?
+  skills              String?
+  resetToken          String?
+  resetTokenExpiry    DateTime?
+  createdAt           DateTime  @default(now())
 
-  projects       Project[]
-  abilityScores  AbilityScore[]
-  growthRecords  GrowthRecord[]
-  weeklyReports  WeeklyReport[]
-  timeCapsules   TimeCapsule[]
+  projects            Project[]
+  abilityScores       AbilityScore[]
+  growthRecords       GrowthRecord[]
+  weeklyReports       WeeklyReport[]
+  timeCapsules        TimeCapsule[]
   challengeApplications ChallengeApplication[]
   challengeSubmissions ChallengeSubmission[]
-  badges         Badge[]
-  certificates   Certificate[]
+  badges              Badge[]
+  certificates        Certificate[]
 }
 
 model Project {

@@ -27,6 +27,9 @@ export default function Navbar() {
               <Link href="/challenges" className="text-slate-600 hover:text-slate-900 transition">
                 挑战
               </Link>
+              <Link href="/profile" className="text-slate-600 hover:text-slate-900 transition">
+                个人资料
+              </Link>
               <Link
                 href={`/profile/${(session.user as any)?.id}`}
                 className="text-slate-600 hover:text-slate-900 transition"

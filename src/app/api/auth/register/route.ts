@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { sanitizeInput } from '@/lib/sanitize';
 
 const registerSchema = z.object({
   name: z.string().min(1, '请输入姓名'),
   email: z.string().email('请输入有效的邮箱'),
   password: z.string().min(6, '密码至少6位'),
+  confirmPassword: z.string().min(6, '确认密码至少6位'),
   role: z.enum(['STUDENT', 'ENTERPRISE', 'ADMIN']).default('STUDENT'),
   school: z.string().optional(),
   major: z.string().optional(),
@@ -17,6 +19,13 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const data = registerSchema.parse(body);
+
+    if (data.password !== data.confirmPassword) {
+      return NextResponse.json(
+        { error: '两次密码不一致' },
+        { status: 400 }
+      );
+    }
 
     const existingUser = await prisma.user.findUnique({
       where: { email: data.email },
@@ -33,17 +42,16 @@ export async function POST(req: NextRequest) {
 
     const user = await prisma.user.create({
       data: {
-        name: data.name,
+        name: sanitizeInput(data.name),
         email: data.email,
         password: hashedPassword,
         role: data.role,
-        school: data.school,
-        major: data.major,
+        school: data.school ? sanitizeInput(data.school) : undefined,
+        major: data.major ? sanitizeInput(data.major) : undefined,
         graduationYear: data.graduationYear,
       },
     });
 
-    // Create initial ability score
     await prisma.abilityScore.create({
       data: {
         userId: user.id,

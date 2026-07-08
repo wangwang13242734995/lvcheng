@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import { calculateAbilityScores, getLatestAbilityScore } from '@/services/ability-engine';
+import { sanitizeInput } from '@/lib/sanitize';
 
 const projectSchema = z.object({
   title: z.string().min(1, '请输入项目名称'),
@@ -54,48 +55,43 @@ export async function POST(req: NextRequest) {
     const project = await prisma.project.create({
       data: {
         userId,
-        title: data.title,
+        title: sanitizeInput(data.title),
         type: data.type,
-        role: data.role,
+        role: data.role ? sanitizeInput(data.role) : undefined,
         teamSize: data.teamSize,
         startDate: data.startDate ? new Date(data.startDate) : null,
         endDate: data.endDate ? new Date(data.endDate) : null,
         techStack: data.techStack ? JSON.stringify(data.techStack) : null,
-        description: data.description,
-        difficulty: data.difficulty,
-        outcome: data.outcome,
+        description: data.description ? sanitizeInput(data.description) : undefined,
+        difficulty: data.difficulty ? sanitizeInput(data.difficulty) : undefined,
+        outcome: data.outcome ? sanitizeInput(data.outcome) : undefined,
         outcomeType: data.outcomeType,
-        outcomeData: data.outcomeData,
-        difficultyEncountered: data.difficultyEncountered,
-        solution: data.solution,
+        outcomeData: data.outcomeData ? sanitizeInput(data.outcomeData) : undefined,
+        difficultyEncountered: data.difficultyEncountered ? sanitizeInput(data.difficultyEncountered) : undefined,
+        solution: data.solution ? sanitizeInput(data.solution) : undefined,
         links: data.links ? JSON.stringify(data.links) : null,
         videoUrl: data.videoUrl || null,
         status: data.status,
       },
     });
 
-    // Get old scores before recalculation
     const oldScores = await getLatestAbilityScore(userId);
 
-    // Create growth record for the project
     await prisma.growthRecord.create({
       data: {
         userId,
         projectId: project.id,
         type: 'MILESTONE',
-        title: `创建了项目：${data.title}`,
-        content: data.description,
+        title: `创建了项目：${sanitizeInput(data.title)}`,
+        content: data.description ? sanitizeInput(data.description) : undefined,
         abilitySignals: JSON.stringify(['craft']),
       },
     });
 
-    // Recalculate ability scores
     await calculateAbilityScores(userId);
 
-    // Get new scores after recalculation
     const newScores = await getLatestAbilityScore(userId);
 
-    // Calculate score changes
     const scoreChanges = newScores && oldScores ? {
       craft: newScores.craft - oldScores.craft,
       learn: newScores.learn - oldScores.learn,
