@@ -1,9 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
 import { sanitizeInput } from '@/lib/sanitize';
 
 interface User {
@@ -18,7 +15,7 @@ interface User {
   skills: string | null;
 }
 
-export default async function ProfilePage() {
+export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState<User | null>(null);
