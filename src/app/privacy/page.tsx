@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export const metadata = {
   title: '隐私政策 - 履程',
@@ -9,21 +9,24 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-3xl mx-auto px-4 py-16">
-        <Link href="/" className="text-green-900 hover:text-green-800 text-sm mb-8 inline-block">
+        <Link href="/" className="text-[#4A3728] hover:text-[#6B4E3D] text-sm mb-8 inline-block">
           ← 返回首页
         </Link>
         <h1 className="text-3xl font-bold text-slate-900 mb-2">隐私政策</h1>
-        <p className="text-slate-500 mb-10">最后更新：2026年7月</p>
+        <p className="text-slate-500 mb-10">最后更新：2026年7月15日</p>
 
         <div className="prose prose-slate max-w-none">
           <h2 className="text-xl font-semibold text-slate-900 mt-8 mb-3">1. 我们收集什么信息</h2>
           <p className="text-slate-600 leading-relaxed mb-4">
-            当您注册履程账号时，我们会收集您提供的基本信息，包括姓名、邮箱、密码。
+            当您注册履程账号时，我们会收集您提供的基本信息，包括姓名、手机号、密码。
             您还可以选择填写专业方向、预计入职年份等信息，用于生成您的能力名片。
           </p>
           <p className="text-slate-600 leading-relaxed mb-4">
             在使用过程中，我们会收集您主动记录的项目经历、技能、成长笔记等内容。
             这些内容构成您的能力档案，是平台的核心价值所在。
+          </p>
+          <p className="text-slate-600 leading-relaxed mb-4">
+            我们还会收集必要的技术信息，包括设备信息、IP地址、浏览器类型等，用于保障服务安全和优化用户体验。
           </p>
 
           <h2 className="text-xl font-semibold text-slate-900 mt-8 mb-3">2. 我们如何使用您的信息</h2>
@@ -37,11 +40,14 @@ export default function PrivacyPage() {
           <p className="text-slate-600 leading-relaxed mb-4">
             <strong>产品改进：</strong>我们会使用匿名化的统计数据优化产品体验，但不会将您的个人信息用于其他目的。
           </p>
+          <p className="text-slate-600 leading-relaxed mb-4">
+            <strong>安全保障：</strong>我们会使用您的信息检测和防止欺诈、滥用行为，保障平台安全。
+          </p>
 
           <h2 className="text-xl font-semibold text-slate-900 mt-8 mb-3">3. 信息公开与分享</h2>
           <p className="text-slate-600 leading-relaxed mb-4">
             您的能力名片（包含项目展示、雷达图、技能标签）可以通过您主动分享的链接被他人查看。
-            您的邮箱、密码、未公开的项目细节等敏感信息不会公开。
+            您的手机号、密码、未公开的项目细节等敏感信息不会公开。
           </p>
           <p className="text-slate-600 leading-relaxed mb-4">
             我们不会出售您的个人信息。除非法律要求，否则不会向第三方披露您的个人数据。
@@ -58,6 +64,9 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold text-slate-900 mt-8 mb-3">5. 您的权利</h2>
           <p className="text-slate-600 leading-relaxed mb-4">
             您有权随时查看、修改、删除您的个人信息和项目记录。您也可以申请注销账号，我们会在合理时间内删除您的数据。
+          </p>
+          <p className="text-slate-600 leading-relaxed mb-4">
+            如发现您的个人信息被不当使用，您有权要求我们采取纠正措施。
           </p>
 
           <h2 className="text-xl font-semibold text-slate-900 mt-8 mb-3">6. Cookie 的使用</h2>

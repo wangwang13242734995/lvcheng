@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -7,6 +7,7 @@ import Link from 'next/link';
 import AbilityRadarChart from '@/components/AbilityRadarChart';
 import ShareCard from '@/components/ShareCard';
 import AchievementPanel from '@/components/AchievementPanel';
+import { DEFAULT_ABILITY_SCORES, ABILITY_TOTAL_BASE_SCORE } from '@/lib/ability-constants';
 
 interface DashboardData {
   score: {
@@ -36,9 +37,14 @@ export default function DashboardPage() {
     }
     if (status === 'authenticated') {
       fetch('/api/ability')
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error('加载失败');
+          return res.json();
+        })
         .then((d) => setData(d))
-        .catch(() => {})
+        .catch((err) => {
+          console.error('Failed to load dashboard:', err);
+        })
         .finally(() => setLoading(false));
     }
   }, [status, router]);
@@ -46,13 +52,13 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto px-4 py-16 text-center">
-        <div className="inline-block w-8 h-8 border-3 border-slate-300 border-t-green-500 rounded-full animate-spin" />
+        <div className="inline-block w-8 h-8 border-3 border-slate-300 border-t-[#5D7A57] rounded-full animate-spin" />
         <p className="text-slate-400 mt-4 text-sm">加载中...</p>
       </div>
     );
   }
 
-  const defaultScores = { craft: 30, learn: 30, drive: 30, team: 30, grit: 30, express: 30, totalScore: 30 };
+  const defaultScores = DEFAULT_ABILITY_SCORES;
   const scores = data?.score || defaultScores;
 
   const scoreEntries = [
@@ -86,7 +92,7 @@ export default function DashboardPage() {
         </div>
         <Link
           href="/projects/new"
-          className="bg-gradient-to-r from-green-900 to-green-950 text-white px-5 py-2.5 rounded-xl hover:from-green-800 hover:to-green-900 transition text-sm font-medium shadow-sm"
+          className="bg-gradient-to-r from-[#4A3728] to-[#2C1F14] text-white px-5 py-2.5 rounded-xl hover:from-[#6B4E3D] hover:to-[#4A3728] transition text-sm font-medium shadow-sm"
         >
           + 记录新项目
         </Link>
@@ -97,15 +103,15 @@ export default function DashboardPage() {
         {/* Weekly Review */}
         <Link
           href="/weekly-review"
-          className="group bg-gradient-to-br from-green-50 to-white p-6 rounded-2xl border border-green-100 hover:border-green-200 hover:shadow-md transition-all"
+          className="group bg-gradient-to-br from-[#F7FAF6] to-white p-6 rounded-2xl border border-[#EDF3EB] hover:border-[#D6E4D2] hover:shadow-md transition-all"
         >
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📊</div>
+            <div className="w-12 h-12 bg-[#EDF3EB] rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📊</div>
             <div className="flex-1">
               <h3 className="font-semibold text-slate-900">本周复盘</h3>
               <p className="text-xs text-slate-500 mt-0.5">看看这周你的能力变化</p>
             </div>
-            <span className="text-green-600 text-sm font-medium group-hover:translate-x-1 transition-transform">查看 →</span>
+            <span className="text-[#4A6B43] text-sm font-medium group-hover:translate-x-1 transition-transform">查看 →</span>
           </div>
         </Link>
 
@@ -130,13 +136,13 @@ export default function DashboardPage() {
         {/* Radar Chart - 3 cols */}
         <div className="md:col-span-3 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
           <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <span className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-sm">⬡</span>
+            <span className="w-8 h-8 bg-[#EDF3EB] rounded-lg flex items-center justify-center text-[#4A6B43] text-sm">⬡</span>
             六维能力
           </h2>
           <AbilityRadarChart scores={scores} />
           <div className="flex items-center justify-center mt-4 gap-2">
             <span className="text-sm text-slate-500">综合得分</span>
-            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">{scores.totalScore || 30}</span>
+            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">{scores.totalScore || ABILITY_TOTAL_BASE_SCORE}</span>
           </div>
         </div>
 
@@ -201,7 +207,7 @@ export default function DashboardPage() {
         ) : (
           <div className="text-center py-10">
             <p className="text-slate-400 mb-3">还没有记录</p>
-            <Link href="/projects/new" className="text-green-600 hover:text-green-700 font-medium text-sm">
+            <Link href="/projects/new" className="text-[#4A6B43] hover:text-[#7A9A75] font-medium text-sm">
               开始记录第一个项目 →
             </Link>
           </div>
@@ -227,6 +233,7 @@ export default function DashboardPage() {
           scores={scores}
           projectCount={data?.projects?.length || 0}
           growthCount={data?.growthRecords?.length || 0}
+          userId={data?.user?.id}
         />
       </div>
     </div>

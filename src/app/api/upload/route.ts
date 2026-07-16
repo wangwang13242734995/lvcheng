@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
+import { logger } from '@/lib/logger';
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 const ALLOWED_TYPES = ['video/mp4', 'video/webm', 'video/quicktime', 'video/x-msvideo', 'video/mov'];
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
     const videoUrl = `/uploads/${userId}/${filename}`;
     return NextResponse.json({ videoUrl }, { status: 201 });
   } catch (error) {
-    console.error('Upload error:', error);
+    logger.error('Upload error', { error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: '上传失败，请稍后重试' }, { status: 500 });
   }
 }

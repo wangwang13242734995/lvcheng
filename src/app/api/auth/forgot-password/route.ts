@@ -1,12 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { checkRateLimit } from '@/lib/rate-limit';
+import { sendPasswordResetEmail } from '@/services/email-service';
 
 const forgotSchema = z.object({
   email: z.string().email('请输入有效的邮箱'),
 });
 
 export async function POST(req: NextRequest) {
+  const rateLimitResult = checkRateLimit(req, 'forgot-password', {
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 3,
+    message: '密码重置请求过于频繁，请1小时后再试',
+  });
+
+  if (!rateLimitResult.allowed) {
+    return NextResponse.json(
+      { error: '密码重置请求过于频繁，请1小时后再试' },
+      {
+        status: 429,
+        headers: { 'Retry-After': '3600' },
+      }
+    );
+  }
+
   try {
     const body = await req.json();
     const data = forgotSchema.parse(body);
@@ -29,6 +47,8 @@ export async function POST(req: NextRequest) {
       where: { id: user.id },
       data: { resetToken, resetTokenExpiry },
     });
+
+    await sendPasswordResetEmail(data.email, resetToken);
 
     return NextResponse.json({
       message: '如果该邮箱已注册，重置链接已发送',

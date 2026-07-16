@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -11,10 +11,10 @@ model User {
   id                  String    @id @default(cuid())
   name                String
   email               String    @unique
+  phone               String?   @unique
   password            String
   role                String    @default("STUDENT")
   avatar              String?
-  school              String?
   major               String?
   graduationYear      Int?
   bio                 String?
@@ -30,8 +30,14 @@ model User {
   timeCapsules        TimeCapsule[]
   challengeApplications ChallengeApplication[]
   challengeSubmissions ChallengeSubmission[]
+  challengeFavorites   ChallengeFavorite[]
   badges              Badge[]
   certificates        Certificate[]
+  notifications       Notification[]
+
+  @@index([role, createdAt(sort: Desc)])
+  @@index([phone])
+  @@index([resetToken])
 }
 
 model Project {
@@ -60,21 +66,28 @@ model Project {
 
   user              User     @relation(fields: [userId], references: [id])
   growthRecords     GrowthRecord[]
+
+  @@index([userId, status, createdAt(sort: Desc)])
+  @@index([status, createdAt(sort: Desc)])
+  @@index([userId, createdAt(sort: Desc)])
 }
 
 model AbilityScore {
   id            String   @id @default(cuid())
   userId        String
-  craft         Int      @default(30)
-  learn         Int      @default(30)
-  drive         Int      @default(30)
-  team          Int      @default(30)
-  grit          Int      @default(30)
-  express       Int      @default(30)
-  totalScore    Int      @default(30)
+  craft         Int      @default(10)
+  learn         Int      @default(10)
+  drive         Int      @default(10)
+  team          Int      @default(10)
+  grit          Int      @default(10)
+  express       Int      @default(10)
+  totalScore    Int      @default(10)
   calculatedAt  DateTime @default(now())
 
   user          User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, calculatedAt(sort: Desc)])
+  @@index([totalScore(sort: Desc)])
 }
 
 model GrowthRecord {
@@ -90,6 +103,9 @@ model GrowthRecord {
 
   user            User     @relation(fields: [userId], references: [id])
   project         Project? @relation(fields: [projectId], references: [id])
+
+  @@index([userId, date(sort: Desc)])
+  @@index([userId, type])
 }
 
 model WeeklyReport {
@@ -135,10 +151,17 @@ model Challenge {
   deadline        DateTime?
   spots           Int?
   status          String   @default("OPEN")
+  creatorId       String?
   createdAt       DateTime @default(now())
 
   applications    ChallengeApplication[]
   submissions     ChallengeSubmission[]
+  favorites       ChallengeFavorite[]
+
+  @@index([status, createdAt(sort: Desc)])
+  @@index([category, status])
+  @@index([company])
+  @@index([creatorId])
 }
 
 model ChallengeApplication {
@@ -151,6 +174,10 @@ model ChallengeApplication {
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   user        User      @relation(fields: [userId], references: [id])
   submission  ChallengeSubmission?
+
+  @@unique([challengeId, userId])
+  @@index([userId, status])
+  @@index([challengeId, status])
 }
 
 model ChallengeSubmission {
@@ -205,4 +232,36 @@ model Certificate {
   issuedAt        DateTime @default(now())
 
   user            User     @relation(fields: [userId], references: [id])
+}
+
+model Notification {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String
+  title       String
+  content     String
+  targetId    String?
+  targetType  String?
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([type])
+}
+
+model ChallengeFavorite {
+  id          String   @id @default(cuid())
+  userId      String
+  challengeId String
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+
+  @@unique([userId, challengeId])
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([challengeId])
 }

@@ -1,0 +1,17 @@
+{
+  "name": "履程",
+  "short_name": "履程",
+  "description": "用作品说话的能力展示平台",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#14532d",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32 64x64",
+      "type": "image/x-icon"
+    }
+  ],
+  "lang": "zh-CN"
+}

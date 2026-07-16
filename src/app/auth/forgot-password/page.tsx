@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -43,10 +43,10 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-8 bg-gradient-to-br from-green-900 via-green-950 to-slate-900">
+    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-8 bg-gradient-to-br from-[#4A3728] via-[#2C1F14] to-slate-900">
       <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-xl relative z-10">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-green-900 to-green-950 rounded-xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-14 h-14 bg-gradient-to-br from-[#4A3728] to-[#2C1F14] rounded-xl flex items-center justify-center mx-auto mb-4">
             <span className="text-white text-2xl font-bold">履</span>
           </div>
           <h1 className="text-2xl font-bold text-slate-900">找回密码</h1>
@@ -55,14 +55,14 @@ export default function ForgotPasswordPage() {
 
         {success ? (
           <div className="text-center py-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-green-600 text-3xl">✓</span>
+            <div className="w-16 h-16 bg-[#EDF3EB] rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-[#4A6B43] text-3xl">✓</span>
             </div>
             <h2 className="text-xl font-semibold text-slate-900 mb-2">重置链接已发送</h2>
             <p className="text-slate-500 text-sm">请检查你的邮箱，点击链接重置密码</p>
             <Link
               href="/auth/login"
-              className="inline-block mt-6 text-green-900 hover:text-green-800 font-medium"
+              className="inline-block mt-6 text-[#4A3728] hover:text-[#6B4E3D] font-medium"
             >
               返回登录
             </Link>
@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#5D7A57] focus:border-transparent transition"
                   placeholder="your@email.com"
                   required
                 />
@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-green-900 to-green-950 text-white py-2.5 rounded-xl hover:from-green-800 hover:to-green-900 disabled:opacity-50 transition font-medium shadow-sm"
+                className="w-full bg-gradient-to-r from-[#4A3728] to-[#2C1F14] text-white py-2.5 rounded-xl hover:from-[#6B4E3D] hover:to-[#4A3728] disabled:opacity-50 transition font-medium shadow-sm"
               >
                 {loading ? '发送中...' : '发送重置链接'}
               </button>

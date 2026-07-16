@@ -3,19 +3,36 @@ import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { sanitizeInput } from '@/lib/sanitize';
+import { checkRateLimit } from '@/lib/rate-limit';
+import { DEFAULT_ABILITY_SCORES } from '@/lib/ability-constants';
+import { sendWelcomeEmail } from '@/services/email-service';
+
+const phoneRegex = /^1[3-9]\d{9}$/;
 
 const registerSchema = z.object({
-  name: z.string().min(1, '请输入姓名'),
-  email: z.string().email('请输入有效的邮箱'),
+  phone: z.string().regex(phoneRegex, '请输入有效的11位手机号'),
   password: z.string().min(6, '密码至少6位'),
   confirmPassword: z.string().min(6, '确认密码至少6位'),
-  role: z.enum(['STUDENT', 'ENTERPRISE', 'ADMIN']).default('STUDENT'),
-  school: z.string().optional(),
-  major: z.string().optional(),
-  graduationYear: z.number().int().optional(),
+  name: z.string().min(1, '请输入昵称').max(20, '昵称不超过20字'),
 });
 
 export async function POST(req: NextRequest) {
+  const rateLimitResult = checkRateLimit(req, 'register', {
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 10,
+    message: '注册请求过于频繁，请1小时后再试',
+  });
+
+  if (!rateLimitResult.allowed) {
+    return NextResponse.json(
+      { error: '注册请求过于频繁，请1小时后再试' },
+      {
+        status: 429,
+        headers: { 'Retry-After': '3600' },
+      }
+    );
+  }
+
   try {
     const body = await req.json();
     const data = registerSchema.parse(body);
@@ -27,43 +44,38 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const existingUser = await prisma.user.findUnique({
-      where: { email: data.email },
+    const existingByPhone = await prisma.user.findUnique({
+      where: { phone: data.phone },
     });
 
-    if (existingUser) {
+    if (existingByPhone) {
       return NextResponse.json(
-        { error: '该邮箱已注册' },
+        { error: '该手机号已注册' },
         { status: 400 }
       );
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
+    const syntheticEmail = `${data.phone}@phone.local`;
 
     const user = await prisma.user.create({
       data: {
         name: sanitizeInput(data.name),
-        email: data.email,
+        email: syntheticEmail,
+        phone: data.phone,
         password: hashedPassword,
-        role: data.role,
-        school: data.school ? sanitizeInput(data.school) : undefined,
-        major: data.major ? sanitizeInput(data.major) : undefined,
-        graduationYear: data.graduationYear,
+        role: 'STUDENT',
       },
     });
 
     await prisma.abilityScore.create({
       data: {
         userId: user.id,
-        craft: 30,
-        learn: 30,
-        drive: 30,
-        team: 30,
-        grit: 30,
-        express: 30,
-        totalScore: 30,
+        ...DEFAULT_ABILITY_SCORES,
       },
     });
+
+    sendWelcomeEmail(user.email, user.name);
 
     return NextResponse.json(
       { message: '注册成功', userId: user.id },

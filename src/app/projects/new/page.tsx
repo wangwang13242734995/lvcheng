@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ABILITY_BASE_SCORE } from '@/lib/ability-constants';
 
 const projectTypes = [
   { value: 'COURSE', label: '课程作业' },
@@ -32,6 +33,15 @@ export default function NewProjectPage() {
   const [scoreResult, setScoreResult] = useState<{
     scoreChanges: Record<string, number>;
     newScores: Record<string, number>;
+  } | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState<{
+    techStack: string[];
+    suggestedDifficulty: string;
+    detectedOutcomeType: string;
+    quantifiedResults: string[];
+    completenessScore: number;
+    suggestions: string[];
   } | null>(null);
 
   const [form, setForm] = useState({
@@ -121,6 +131,55 @@ export default function NewProjectPage() {
     setVideoPreview('');
   };
 
+  const handleAnalyze = async () => {
+    if (!form.title && !form.description) {
+      setError('请先填写项目名称或描述');
+      return;
+    }
+    setAnalyzing(true);
+    setError('');
+    try {
+      const res = await fetch('/api/projects/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: form.title,
+          description: form.description,
+          difficultyEncountered: form.difficultyEncountered,
+          solution: form.solution,
+          videoUrl,
+          links,
+          existingTechStack: techStack,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || '解析失败');
+      }
+      const data = await res.json();
+      setAnalysis(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '解析失败');
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
+  const applyAnalysis = () => {
+    if (!analysis) return;
+    // 应用技术栈（合并去重）
+    setTechStack(prev => Array.from(new Set([...prev, ...analysis.techStack])));
+    // 应用难度
+    if (analysis.suggestedDifficulty) {
+      updateField('difficulty', analysis.suggestedDifficulty);
+    }
+    // 应用成果类型
+    if (analysis.detectedOutcomeType) {
+      updateField('outcomeType', analysis.detectedOutcomeType);
+    }
+    setAnalysis(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -164,12 +223,12 @@ export default function NewProjectPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       {/* Header */}
-      <div className="bg-gradient-to-br from-green-900 to-green-950 rounded-2xl p-8 mb-6 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full -translate-y-8 translate-x-8" />
+      <div className="bg-gradient-to-br from-[#4A3728] to-[#2C1F14] rounded-2xl p-8 mb-6 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#5D7A57]/10 rounded-full -translate-y-8 translate-x-8" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-orange-500/10 rounded-full translate-y-6 -translate-x-6" />
         <div className="relative">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-500/20 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-[#5D7A57]/20 rounded-xl flex items-center justify-center">
               <span className="text-xl">✨</span>
             </div>
             <div>
@@ -206,7 +265,7 @@ export default function NewProjectPage() {
                 return (
                   <div key={item.key} className="py-2 bg-slate-50 rounded-lg">
                     <p className="text-lg font-bold text-slate-800">
-                      {scoreResult.newScores[item.key] || 30}
+                      {scoreResult.newScores[item.key] || ABILITY_BASE_SCORE}
                     </p>
                     {change > 0 && (
                       <p className="text-xs text-emerald-600 font-medium">+{change}</p>
@@ -378,6 +437,128 @@ export default function NewProjectPage() {
               className="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-slate-400 focus:border-transparent"
               placeholder="如：使用了不熟悉的框架、时间紧迫等"
             />
+          </div>
+
+          {/* AI 解析 */}
+          <div className="border-t border-slate-100 pt-4">
+            <button
+              type="button"
+              onClick={handleAnalyze}
+              disabled={analyzing || (!form.title && !form.description)}
+              className="w-full py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg text-sm font-medium hover:from-indigo-600 hover:to-purple-600 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+            >
+              {analyzing ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  正在解析...
+                </>
+              ) : (
+                <>
+                  <span>✨</span>
+                  AI 智能解析
+                </>
+              )}
+            </button>
+
+            {analysis && (
+              <div className="mt-4 space-y-3">
+                {/* 完整度评分 */}
+                <div className="flex items-center gap-3 bg-slate-50 rounded-lg p-3">
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-xs font-medium text-slate-600">项目完整度</span>
+                      <span className="text-sm font-bold text-slate-800">{analysis.completenessScore}/100</span>
+                    </div>
+                    <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full transition-all ${
+                          analysis.completenessScore >= 70 ? 'bg-[#5D7A57]' :
+                          analysis.completenessScore >= 40 ? 'bg-amber-500' : 'bg-red-400'
+                        }`}
+                        style={{ width: `${analysis.completenessScore}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* 检测到的技术栈 */}
+                {analysis.techStack.length > 0 && (
+                  <div className="bg-blue-50 rounded-lg p-3">
+                    <p className="text-xs font-medium text-blue-700 mb-2">检测到的技术栈</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {analysis.techStack.map((tech) => (
+                        <span key={tech} className="text-xs px-2 py-1 bg-white text-blue-600 rounded border border-blue-200">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 建议难度和成果 */}
+                <div className="grid grid-cols-2 gap-2">
+                  {analysis.suggestedDifficulty && (
+                    <div className="bg-purple-50 rounded-lg p-3">
+                      <p className="text-xs font-medium text-purple-700 mb-1">建议难度</p>
+                      <p className="text-sm font-bold text-purple-800">
+                        {analysis.suggestedDifficulty === 'EXPERT' ? '专家级' :
+                         analysis.suggestedDifficulty === 'HARD' ? '困难' :
+                         analysis.suggestedDifficulty === 'MEDIUM' ? '中等' : '简单'}
+                      </p>
+                    </div>
+                  )}
+                  {analysis.detectedOutcomeType && (
+                    <div className="bg-[#F7FAF6] rounded-lg p-3">
+                      <p className="text-xs font-medium text-[#7A9A75] mb-1">检测到的成果</p>
+                      <p className="text-sm font-bold text-[#6B4E3D]">
+                        {analysis.detectedOutcomeType === 'AWARD' ? '获奖' :
+                         analysis.detectedOutcomeType === 'LAUNCHED' ? '已上线' :
+                         analysis.detectedOutcomeType === 'OPEN_SOURCE' ? '开源' :
+                         analysis.detectedOutcomeType === 'QUANTIFIED' ? '量化成果' : analysis.detectedOutcomeType}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* 量化数据 */}
+                {analysis.quantifiedResults.length > 0 && (
+                  <div className="bg-amber-50 rounded-lg p-3">
+                    <p className="text-xs font-medium text-amber-700 mb-2">检测到的量化数据</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {analysis.quantifiedResults.map((q, i) => (
+                        <span key={i} className="text-xs px-2 py-1 bg-white text-amber-700 rounded border border-amber-200">
+                          {q}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* 改进建议 */}
+                {analysis.suggestions.length > 0 && (
+                  <div className="bg-orange-50 rounded-lg p-3">
+                    <p className="text-xs font-medium text-orange-700 mb-2">提升建议</p>
+                    <ul className="space-y-1">
+                      {analysis.suggestions.map((s, i) => (
+                        <li key={i} className="text-xs text-orange-600 flex items-start gap-1.5">
+                          <span className="text-orange-400 mt-0.5">•</span>
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* 应用按钮 */}
+                <button
+                  type="button"
+                  onClick={applyAnalysis}
+                  className="w-full py-2 bg-[#3D5A37] text-white rounded-lg text-sm font-medium hover:bg-[#6B4E3D] transition"
+                >
+                  应用解析结果
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -557,7 +738,7 @@ export default function NewProjectPage() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2.5 bg-gradient-to-r from-green-900 to-green-950 text-white rounded-xl hover:opacity-90 disabled:opacity-50 transition font-medium shadow-sm"
+            className="px-6 py-2.5 bg-gradient-to-r from-[#4A3728] to-[#2C1F14] text-white rounded-xl hover:opacity-90 disabled:opacity-50 transition font-medium shadow-sm"
           >
             {loading ? '保存中...' : '保存项目'}
           </button>

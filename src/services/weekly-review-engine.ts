@@ -1,6 +1,7 @@
 // 周复盘引擎 - 自动生成用户本周成长总结
 
 import { prisma } from '@/lib/prisma';
+import { DEFAULT_ABILITY_SCORES } from '@/lib/ability-constants';
 
 export interface WeeklyReview {
   weekStart: Date;
@@ -90,11 +91,11 @@ export async function generateWeeklyReview(userId: string): Promise<WeeklyReview
   // Calculate ability changes
   const current = currentScore
     ? { craft: currentScore.craft, learn: currentScore.learn, drive: currentScore.drive, team: currentScore.team, grit: currentScore.grit, express: currentScore.express, totalScore: currentScore.totalScore }
-    : { craft: 30, learn: 30, drive: 30, team: 30, grit: 30, express: 30, totalScore: 30 };
+    : DEFAULT_ABILITY_SCORES;
 
   const previous = previousScores
     ? { craft: previousScores.craft, learn: previousScores.learn, drive: previousScores.drive, team: previousScores.team, grit: previousScores.grit, express: previousScores.express, totalScore: previousScores.totalScore }
-    : { craft: 30, learn: 30, drive: 30, team: 30, grit: 30, express: 30, totalScore: 30 };
+    : DEFAULT_ABILITY_SCORES;
 
   const changes: Record<string, number> = {};
   let biggestGainKey = '';

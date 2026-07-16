@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 
 export const metadata = {
   title: '关于我们 - 履程',
@@ -9,7 +9,7 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-3xl mx-auto px-4 py-16">
-        <Link href="/" className="text-green-900 hover:text-green-800 text-sm mb-8 inline-block">
+        <Link href="/" className="text-[#4A3728] hover:text-[#6B4E3D] text-sm mb-8 inline-block">
           ← 返回首页
         </Link>
         <h1 className="text-3xl font-bold text-slate-900 mb-2">关于履程</h1>
@@ -25,8 +25,8 @@ export default function AboutPage() {
 
           <h2 className="text-xl font-semibold text-slate-900 mt-8 mb-3">为什么是履程</h2>
           <p className="text-slate-600 leading-relaxed mb-4">
-            <strong>传统简历的问题：</strong>每个人都写着"学生会主席"、"绩点 3.8"、
-            "熟练掌握 XX 技术"——面试官根本分不清谁真有能力。入职后才发现不匹配，
+            <strong>传统简历的问题：</strong>每个人都写着&ldquo;学生会主席&rdquo;、&ldquo;绩点 3.8&rdquo;、
+            &ldquo;熟练掌握 XX 技术&rdquo;——面试官根本分不清谁真有能力。入职后才发现不匹配，
             试错成本极高。
           </p>
           <p className="text-slate-600 leading-relaxed mb-4">
@@ -38,13 +38,13 @@ export default function AboutPage() {
           <h2 className="text-xl font-semibold text-slate-900 mt-8 mb-3">核心价值</h2>
           <div className="grid sm:grid-cols-2 gap-4 my-6">
             <div className="bg-slate-50 p-5 rounded-xl">
-              <h3 className="font-semibold text-slate-900 mb-2">📈 过程 > 结果</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">📈 过程 ＞ 结果</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
                 展示你是怎么一步步做到的，比只展示结果更有说服力。
               </p>
             </div>
             <div className="bg-slate-50 p-5 rounded-xl">
-              <h3 className="font-semibold text-slate-900 mb-2">🎯 数据 > 自述</h3>
+              <h3 className="font-semibold text-slate-900 mb-2">🎯 数据 ＞ 自述</h3>
               <p className="text-slate-600 text-sm leading-relaxed">
                 能力分数由行为数据自动计算，不是自己填的，更有可信度。
               </p>
@@ -69,42 +69,42 @@ export default function AboutPage() {
           </p>
           <div className="grid sm:grid-cols-2 gap-3 my-6">
             <div className="flex gap-3 items-start">
-              <span className="w-8 h-8 bg-green-100 text-green-900 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">C</span>
+              <span className="w-8 h-8 bg-[#EDF3EB] text-[#4A3728] rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">C</span>
               <div>
                 <p className="font-medium text-slate-900">专业力 Craft</p>
                 <p className="text-sm text-slate-500">能不能把事情做好</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="w-8 h-8 bg-green-100 text-green-900 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">L</span>
+              <span className="w-8 h-8 bg-[#EDF3EB] text-[#4A3728] rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">L</span>
               <div>
                 <p className="font-medium text-slate-900">学习力 Learn</p>
                 <p className="text-sm text-slate-500">能成长多快</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="w-8 h-8 bg-green-100 text-green-900 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">D</span>
+              <span className="w-8 h-8 bg-[#EDF3EB] text-[#4A3728] rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">D</span>
               <div>
                 <p className="font-medium text-slate-900">自驱力 Drive</p>
                 <p className="text-sm text-slate-500">需不需要人盯着</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="w-8 h-8 bg-green-100 text-green-900 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">T</span>
+              <span className="w-8 h-8 bg-[#EDF3EB] text-[#4A3728] rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">T</span>
               <div>
                 <p className="font-medium text-slate-900">协作力 Team</p>
                 <p className="text-sm text-slate-500">好不好合作</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="w-8 h-8 bg-green-100 text-green-900 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">G</span>
+              <span className="w-8 h-8 bg-[#EDF3EB] text-[#4A3728] rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">G</span>
               <div>
                 <p className="font-medium text-slate-900">抗压力 Grit</p>
                 <p className="text-sm text-slate-500">遇到困难会不会放弃</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <span className="w-8 h-8 bg-green-100 text-green-900 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">E</span>
+              <span className="w-8 h-8 bg-[#EDF3EB] text-[#4A3728] rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0">E</span>
               <div>
                 <p className="font-medium text-slate-900">表达力 Express</p>
                 <p className="text-sm text-slate-500">能不能说清楚</p>

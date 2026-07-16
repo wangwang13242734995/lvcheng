@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 // GET /api/challenges/[id] - 获取挑战详情
 export async function GET(
@@ -31,7 +32,7 @@ export async function GET(
       hasApplied: userId ? challenge.applications.some((a) => a.userId === userId) : false,
     });
   } catch (error) {
-    console.error('Failed to fetch challenge:', error);
+    logger.error('Failed to fetch challenge', { id: params.id, error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: '获取挑战详情失败' }, { status: 500 });
   }
 }

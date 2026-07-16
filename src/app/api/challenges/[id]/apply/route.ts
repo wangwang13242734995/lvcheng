@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { logger } from '@/lib/logger';
+import { createNewApplicationNotification } from '@/services/notification-service';
 
 // POST /api/challenges/[id]/apply - 报名挑战
 export async function POST(
@@ -49,13 +51,27 @@ export async function POST(
       },
     });
 
+    // 通知企业用户
+    if (challenge.creatorId) {
+      const applicant = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { name: true },
+      });
+      await createNewApplicationNotification(
+        challenge.creatorId,
+        applicant?.name || '一位用户',
+        challenge.title,
+        challenge.id
+      );
+    }
+
     return NextResponse.json({
       success: true,
       application,
       message: '报名成功！',
     });
   } catch (error) {
-    console.error('Failed to apply for challenge:', error);
+    logger.error('Failed to apply for challenge', { id: params.id, error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: '报名失败' }, { status: 500 });
   }
 }
@@ -87,7 +103,7 @@ export async function DELETE(
 
     return NextResponse.json({ success: true, message: '已取消报名' });
   } catch (error) {
-    console.error('Failed to cancel application:', error);
+    logger.error('Failed to cancel application', { id: params.id, error: error instanceof Error ? error.message : String(error) });
     return NextResponse.json({ error: '取消报名失败' }, { status: 500 });
   }
 }

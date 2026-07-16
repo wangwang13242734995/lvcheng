@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
-import { sanitizeInput } from '@/lib/sanitize';
+import { sanitizeInput, validateUrlOrNull } from '@/lib/sanitize';
 
 const updateSchema = z.object({
   title: z.string().min(1, '请输入项目名称'),
@@ -20,8 +20,8 @@ const updateSchema = z.object({
   outcomeData: z.string().optional(),
   difficultyEncountered: z.string().max(200).optional(),
   solution: z.string().max(200).optional(),
-  links: z.array(z.object({ type: z.string(), url: z.string() })).optional(),
-  videoUrl: z.string().optional(),
+  links: z.array(z.object({ type: z.string(), url: z.string().url('请输入有效的链接') })).optional(),
+  videoUrl: z.string().url('请输入有效的视频链接').optional().or(z.literal('')),
   status: z.enum(['DRAFT', 'PUBLISHED']).optional(),
 });
 
@@ -30,20 +30,28 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ error: '未登录' }, { status: 401 });
-  }
+  const currentUserId = session?.user ? (session.user as any).id : null;
 
   const project = await prisma.project.findUnique({
     where: { id: params.id },
-    include: { growthRecords: true },
+    include: {
+      growthRecords: true,
+      user: {
+        select: { id: true, name: true, avatar: true },
+      },
+    },
   });
 
   if (!project) {
     return NextResponse.json({ error: '项目不存在' }, { status: 404 });
   }
 
-  return NextResponse.json(project);
+  const isOwner = currentUserId === project.userId;
+  if (project.status !== 'PUBLISHED' && !isOwner) {
+    return NextResponse.json({ error: '无权查看此项目' }, { status: 403 });
+  }
+
+  return NextResponse.json({ ...project, isOwner });
 }
 
 export async function PUT(

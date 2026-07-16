@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Allow: /talents
+Allow: /projects
+Allow: /challenges
+Allow: /explore
+Allow: /about
+Allow: /dashboard
+Allow: /profile/*
+
+Disallow: /api/
+Disallow: /admin/
+Disallow: /enterprise/
+Disallow: /auth/
+
+Sitemap: https://lvcheng.site/sitemap.xml
+Host: https://lvcheng.site

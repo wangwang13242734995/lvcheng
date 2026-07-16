@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect } from 'react';
 import { checkScoreAchievements, checkProjectMilestones, getAchievementStats } from '@/services/achievement-engine';
+import { ABILITY_BASE_SCORE } from '@/lib/ability-constants';
 
 interface AchievementPanelProps {
   scores: Record<string, number>;
@@ -61,7 +62,7 @@ export default function AchievementPanel({ scores, projectCount }: AchievementPa
                     {a.title}
                   </p>
                   {!a.achieved && (
-                    <p className="text-xs text-slate-400 mt-0.5">差{a.threshold - (scores[a.id.split('_')[0]] || 30)}分</p>
+                    <p className="text-xs text-slate-400 mt-0.5">差{a.threshold - (scores[a.id.split('_')[0]] || ABILITY_BASE_SCORE)}分</p>
                   )}
                 </div>
               ))}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 const resetSchema = z.object({
   token: z.string().min(1, '无效的链接'),
@@ -9,6 +10,22 @@ const resetSchema = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const rateLimitResult = checkRateLimit(req, 'reset-password', {
+    windowMs: 60 * 60 * 1000,
+    maxRequests: 5,
+    message: '密码重置请求过于频繁，请1小时后再试',
+  });
+
+  if (!rateLimitResult.allowed) {
+    return NextResponse.json(
+      { error: '密码重置请求过于频繁，请1小时后再试' },
+      {
+        status: 429,
+        headers: { 'Retry-After': '3600' },
+      }
+    );
+  }
+
   try {
     const body = await req.json();
     const data = resetSchema.parse(body);

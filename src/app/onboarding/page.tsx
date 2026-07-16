@@ -1,9 +1,10 @@
-'use client';
+﻿'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import AbilityRadarChart from '@/components/AbilityRadarChart';
+import { DEFAULT_ABILITY_SCORES, ABILITY_TOTAL_BASE_SCORE, ABILITY_BASE_SCORE } from '@/lib/ability-constants';
 
 const projectTypeOptions = [
   { value: 'COURSE', label: '课程作业', icon: '📚', desc: '课堂项目、大作业、课程设计' },
@@ -80,7 +81,7 @@ export default function OnboardingPage() {
 
   if (status === 'loading') return null;
 
-  const defaultScores = { craft: 30, learn: 30, drive: 30, team: 30, grit: 30, express: 30, totalScore: 30 };
+  const defaultScores = DEFAULT_ABILITY_SCORES;
 
   return (
     <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-12">
@@ -159,7 +160,7 @@ export default function OnboardingPage() {
                 你的能力名片已生成！
               </h1>
               <p className="text-slate-500">
-                综合得分：<span className="text-amber-600 font-bold text-xl">{scores?.totalScore || 30}</span>
+                综合得分：<span className="text-amber-600 font-bold text-xl">{scores?.totalScore || ABILITY_TOTAL_BASE_SCORE}</span>
               </p>
             </div>
 
@@ -171,12 +172,12 @@ export default function OnboardingPage() {
             {/* 六维分数 */}
             <div className="grid grid-cols-3 gap-2 mb-8">
               {[
-                { label: '专业力', value: scores?.craft || 30 },
-                { label: '学习力', value: scores?.learn || 30 },
-                { label: '自驱力', value: scores?.drive || 30 },
-                { label: '协作力', value: scores?.team || 30 },
-                { label: '抗压力', value: scores?.grit || 30 },
-                { label: '表达力', value: scores?.express || 30 },
+                { label: '专业力', value: scores?.craft || ABILITY_BASE_SCORE },
+                { label: '学习力', value: scores?.learn || ABILITY_BASE_SCORE },
+                { label: '自驱力', value: scores?.drive || ABILITY_BASE_SCORE },
+                { label: '协作力', value: scores?.team || ABILITY_BASE_SCORE },
+                { label: '抗压力', value: scores?.grit || ABILITY_BASE_SCORE },
+                { label: '表达力', value: scores?.express || ABILITY_BASE_SCORE },
               ].map((item) => (
                 <div key={item.label} className="py-2 bg-slate-50 rounded-lg">
                   <p className="text-lg font-bold text-orange-600">{item.value}</p>
@@ -188,7 +189,7 @@ export default function OnboardingPage() {
             <div className="space-y-3">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="w-full py-3 bg-green-900 text-white rounded-lg hover:bg-green-800 transition font-medium"
+                className="w-full py-3 bg-[#4A3728] text-white rounded-lg hover:bg-[#6B4E3D] transition font-medium"
               >
                 进入仪表盘 →
               </button>

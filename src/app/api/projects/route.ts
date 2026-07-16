@@ -21,21 +21,52 @@ const projectSchema = z.object({
   outcomeData: z.string().optional(),
   difficultyEncountered: z.string().max(200).optional(),
   solution: z.string().max(200).optional(),
-  links: z.array(z.object({ type: z.string(), url: z.string() })).optional(),
-  videoUrl: z.string().optional(),
+  links: z.array(z.object({ type: z.string(), url: z.string().url('请输入有效的链接') })).optional(),
+  videoUrl: z.string().url('请输入有效的视频链接').optional().or(z.literal('')),
   status: z.enum(['DRAFT', 'PUBLISHED']).default('DRAFT'),
 });
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: '未登录' }, { status: 401 });
   }
 
   const userId = (session.user as any).id;
+  const { searchParams } = new URL(req.url);
+
+  const type = searchParams.get('type');
+  const status = searchParams.get('status');
+  const q = searchParams.get('q');
+  const tech = searchParams.get('tech');
+  const sort = searchParams.get('sort') || 'newest';
+
+  const where: any = { userId };
+
+  if (type && type !== 'ALL') {
+    where.type = type;
+  }
+  if (status) {
+    where.status = status;
+  }
+  if (q) {
+    where.OR = [
+      { title: { contains: q, mode: 'insensitive' } },
+      { description: { contains: q, mode: 'insensitive' } },
+      { techStack: { contains: q, mode: 'insensitive' } },
+    ];
+  }
+  if (tech) {
+    where.techStack = { contains: tech, mode: 'insensitive' };
+  }
+
+  let orderBy: any = { createdAt: 'desc' };
+  if (sort === 'oldest') orderBy = { createdAt: 'asc' };
+  else if (sort === 'title') orderBy = { title: 'asc' };
+
   const projects = await prisma.project.findMany({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
+    where,
+    orderBy,
   });
 
   return NextResponse.json(projects);

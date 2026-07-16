@@ -42,7 +42,6 @@ export interface RegisterFormData {
   email: string;
   password: string;
   role: UserRole;
-  school: string;
   major: string;
   graduationYear: number;
 }

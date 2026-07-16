@@ -6,35 +6,57 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  const currentUserId = session?.user ? (session.user as any).id : null;
+
+  const searchParams = req.nextUrl.searchParams;
+  const targetUserId = searchParams.get('userId');
+
+  if (!targetUserId && !currentUserId) {
     return NextResponse.json({ error: '未登录' }, { status: 401 });
   }
 
-  const userId = (session.user as any).id;
-  const searchParams = req.nextUrl.searchParams;
-  const targetUserId = searchParams.get('userId') || userId;
+  const userId = targetUserId || currentUserId;
+  const isOwnProfile = currentUserId === userId;
 
   const [latestScore, history, user, projects, growthRecords] = await Promise.all([
-    getLatestAbilityScore(targetUserId),
-    getAbilityHistory(targetUserId),
-    prisma.user.findUnique({ where: { id: targetUserId } }),
+    getLatestAbilityScore(userId),
+    getAbilityHistory(userId),
+    prisma.user.findUnique({ where: { id: userId } }),
     prisma.project.findMany({
-      where: { userId: targetUserId, status: 'PUBLISHED' },
+      where: { userId, status: 'PUBLISHED' },
       orderBy: { createdAt: 'desc' },
       take: 3,
     }),
     prisma.growthRecord.findMany({
-      where: { userId: targetUserId },
+      where: { userId },
       orderBy: { date: 'desc' },
-      take: 20,
+      take: isOwnProfile ? 20 : 5,
     }),
   ]);
+
+  if (!user) {
+    return NextResponse.json({ error: '用户不存在' }, { status: 404 });
+  }
+
+  const safeUser = {
+    id: user.id,
+    name: user.name,
+    email: isOwnProfile ? user.email : undefined,
+    avatar: user.avatar,
+    major: user.major,
+    graduationYear: user.graduationYear,
+    bio: user.bio,
+    skills: user.skills,
+    role: user.role,
+    createdAt: user.createdAt,
+  };
 
   return NextResponse.json({
     score: latestScore,
     history,
-    user: user ? { ...user, password: undefined } : null,
+    user: safeUser,
     projects,
     growthRecords,
+    isOwnProfile,
   });
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import AbilityRadarChart from '@/components/AbilityRadarChart';
+import { DEFAULT_ABILITY_SCORES, ABILITY_TOTAL_BASE_SCORE } from '@/lib/ability-constants';
 
 const typeLabels: Record<string, string> = {
   COURSE: '课程作业',
@@ -35,16 +36,22 @@ export default function ProfilePage() {
 
   useEffect(() => {
     fetch(`/api/ability?userId=${params.userId}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error('加载失败');
+        return res.json();
+      })
       .then((d) => setData(d))
-      .catch(() => {})
+      .catch((err) => {
+        console.error('Failed to load profile:', err);
+        setData(null);
+      })
       .finally(() => setLoading(false));
   }, [params.userId]);
 
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center">
-        <div className="inline-block w-8 h-8 border-3 border-slate-300 border-t-green-500 rounded-full animate-spin" />
+        <div className="inline-block w-8 h-8 border-3 border-slate-300 border-t-[#5D7A57] rounded-full animate-spin" />
         <p className="text-slate-400 mt-4 text-sm">加载中...</p>
       </div>
     );
@@ -59,12 +66,12 @@ export default function ProfilePage() {
   }
 
   const { user, score, projects, growthRecords } = data;
-  const defaultScores = { craft: 30, learn: 30, drive: 30, team: 30, grit: 30, express: 30 };
+  const defaultScores = { ...DEFAULT_ABILITY_SCORES };
   const scores = score || defaultScores;
   const skills: string[] = user.skills ? JSON.parse(user.skills) : [];
 
   const abilityItems = [
-    { label: '专业力', value: scores.craft, icon: '🛠', color: 'from-green-500 to-green-600' },
+    { label: '专业力', value: scores.craft, icon: '🛠', color: 'from-[#5D7A57] to-[#4A6B43]' },
     { label: '学习力', value: scores.learn, icon: '📚', color: 'from-blue-500 to-blue-600' },
     { label: '自驱力', value: scores.drive, icon: '⚡', color: 'from-amber-500 to-amber-600' },
     { label: '协作力', value: scores.team, icon: '🤝', color: 'from-purple-500 to-purple-600' },
@@ -75,7 +82,7 @@ export default function ProfilePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Hero Header */}
-      <div className="bg-gradient-to-br from-green-900 to-green-950 rounded-2xl p-8 mb-6 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-[#4A3728] to-[#2C1F14] rounded-2xl p-8 mb-6 relative overflow-hidden">
         {/* 装饰 */}
         <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -translate-y-20 translate-x-20" />
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12" />
@@ -87,18 +94,18 @@ export default function ProfilePage() {
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-white">{user.name}</h1>
             <div className="flex items-center gap-3 mt-2">
-              <span className="text-3xl font-bold text-orange-400">{scores.totalScore || 30}</span>
-              <span className="text-green-200/70 text-sm">综合得分</span>
+              <span className="text-3xl font-bold text-orange-400">{scores.totalScore || ABILITY_TOTAL_BASE_SCORE}</span>
+              <span className="text-[#D6E4D2]/70 text-sm">综合得分</span>
               {projects?.length > 0 && (
                 <>
-                  <span className="text-green-500/50">|</span>
-                  <span className="text-sm text-green-200/70">{projects.length} 个项目</span>
+                  <span className="text-[#5D7A57]/50">|</span>
+                  <span className="text-sm text-[#D6E4D2]/70">{projects.length} 个项目</span>
                 </>
               )}
               {growthRecords?.length > 0 && (
                 <>
-                  <span className="text-green-500/50">|</span>
-                  <span className="text-sm text-green-200/70">{growthRecords.length} 条成长记录</span>
+                  <span className="text-[#5D7A57]/50">|</span>
+                  <span className="text-sm text-[#D6E4D2]/70">{growthRecords.length} 条成长记录</span>
                 </>
               )}
             </div>
@@ -106,10 +113,39 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      {/* Meta Info Strip */}
+      {(user.major || user.graduationYear || user.bio) && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm mb-6 p-5">
+          {user.bio && (
+            <p className="text-slate-700 leading-relaxed mb-3">{user.bio}</p>
+          )}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500">
+            {user.major && (
+              <span className="flex items-center gap-1.5">
+                <span className="text-slate-400">📚</span>
+                {user.major}
+              </span>
+            )}
+            {user.graduationYear && (
+              <span className="flex items-center gap-1.5">
+                <span className="text-slate-400">🎯</span>
+                {user.graduationYear} 届
+              </span>
+            )}
+            {user.createdAt && (
+              <span className="flex items-center gap-1.5">
+                <span className="text-slate-400">📅</span>
+                {new Date(user.createdAt).toLocaleDateString('zh-CN')} 加入
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* 六维能力 - 核心展示 */}
       <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm mb-6">
         <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-          <span className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-sm">⬡</span>
+          <span className="w-8 h-8 bg-[#EDF3EB] rounded-lg flex items-center justify-center text-[#4A6B43] text-sm">⬡</span>
           六维能力
         </h2>
         <AbilityRadarChart scores={scores} />
@@ -134,7 +170,7 @@ export default function ProfilePage() {
           </h2>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill) => (
-              <span key={skill} className="bg-gradient-to-r from-green-50 to-green-100/50 text-green-800 px-3 py-1.5 rounded-full text-sm border border-green-200/60 font-medium">
+              <span key={skill} className="bg-gradient-to-r from-[#F7FAF6] to-[#EDF3EB]/50 text-[#6B4E3D] px-3 py-1.5 rounded-full text-sm border border-[#D6E4D2]/60 font-medium">
                 {skill}
               </span>
             ))}
@@ -176,7 +212,7 @@ export default function ProfilePage() {
                 )}
                 {project.solution && (
                   <p className="text-sm text-slate-600 mt-1">
-                    <span className="font-medium text-green-700">解决：</span>{project.solution}
+                    <span className="font-medium text-[#7A9A75]">解决：</span>{project.solution}
                   </p>
                 )}
               </div>
@@ -189,10 +225,10 @@ export default function ProfilePage() {
       {growthRecords && growthRecords.length > 0 && (
         <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
           <h2 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center text-green-600 text-sm">📈</span>
+            <span className="w-8 h-8 bg-[#EDF3EB] rounded-lg flex items-center justify-center text-[#4A6B43] text-sm">📈</span>
             成长时间线
           </h2>
-          <div className="relative pl-6 border-l-2 border-green-200 space-y-5">
+          <div className="relative pl-6 border-l-2 border-[#D6E4D2] space-y-5">
             {growthRecords.slice(0, 10).map((record: any) => (
               <div key={record.id} className="relative">
                 <div className="absolute -left-[25px] w-4 h-4 bg-orange-500 rounded-full border-2 border-white" />

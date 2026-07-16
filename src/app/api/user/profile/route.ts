@@ -9,7 +9,6 @@ export const dynamic = 'force-dynamic';
 
 const profileSchema = z.object({
   name: z.string().min(1, '姓名不能为空'),
-  school: z.string().optional(),
   major: z.string().optional(),
   graduationYear: z.number().int().min(1900).max(2099).optional(),
   bio: z.string().optional(),
@@ -30,7 +29,6 @@ export async function GET(req: NextRequest) {
         name: true,
         email: true,
         avatar: true,
-        school: true,
         major: true,
         graduationYear: true,
         bio: true,
@@ -62,7 +60,6 @@ export async function PUT(req: NextRequest) {
       where: { email: session.user.email! },
       data: {
         name: sanitizeInput(data.name),
-        school: data.school ? sanitizeInput(data.school) : null,
         major: data.major ? sanitizeInput(data.major) : null,
         graduationYear: data.graduationYear,
         bio: data.bio ? sanitizeInput(data.bio) : null,
@@ -73,7 +70,6 @@ export async function PUT(req: NextRequest) {
         name: true,
         email: true,
         avatar: true,
-        school: true,
         major: true,
         graduationYear: true,
         bio: true,
