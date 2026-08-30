@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -43,46 +43,46 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-[var(--card)] border-b border-[var(--border)] sticky top-0 z-50 backdrop-blur">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-[#4A3728] tracking-wide">
+        <Link href="/" className="text-xl font-bold text-[var(--primary)] tracking-wide font-serif">
           履程
         </Link>
 
         <div className="hidden md:flex items-center gap-4">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="text-slate-600 hover:text-slate-900 transition">
+            <Link key={link.href} href={link.href} className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition">
               {link.label}
             </Link>
           ))}
           {session && (
             <>
               {((session.user as any)?.role === 'ENTERPRISE' || (session.user as any)?.role === 'ADMIN') && (
-                <Link href="/enterprise" className="text-slate-600 hover:text-slate-900 transition">
+                <Link href="/enterprise" className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition">
                   企业后台
                 </Link>
               )}
-              <Link href="/notifications" className="relative text-slate-600 hover:text-slate-900 transition">
+              <Link href="/notifications" className="relative text-[var(--text-secondary)] hover:text-[var(--primary)] transition">
                 <span className="text-lg">🔔</span>
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-orange-500 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--gold)] text-[var(--text-primary)] text-xs font-bold rounded-full flex items-center justify-center">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
               </Link>
-              <Link href="/profile" className="text-slate-600 hover:text-slate-900 transition">
+              <Link href="/profile" className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition">
                 个人资料
               </Link>
               <Link
                 href={`/profile/${(session.user as any)?.id}`}
-                className="text-slate-600 hover:text-slate-900 transition"
+                className="text-[var(--text-secondary)] hover:text-[var(--primary)] transition"
               >
                 名片
               </Link>
-              <span className="text-gray-500 text-sm">{session.user?.name}</span>
+              <span className="text-[var(--text-muted)] text-sm">{session.user?.name}</span>
               <button
                 onClick={handleSignOut}
-                className="text-sm text-gray-500 hover:text-red-500"
+                className="text-sm text-[var(--text-muted)] hover:text-red-600"
               >
                 退出
               </button>
@@ -90,21 +90,18 @@ export default function Navbar() {
           )}
           {!session && (
             <>
-              <Link href="/auth/login" className="text-slate-600 hover:text-slate-900 transition">
-                登录
-              </Link>
               <Link
-                href="/auth/register"
-                className="bg-[#4A3728] text-white px-5 py-2 rounded-lg hover:bg-[#6B4E3D] transition text-sm font-medium"
+                href="/auth/login"
+                className="bg-[var(--primary)] text-[var(--primary-foreground)] px-5 py-2 rounded-lg hover:bg-[var(--primary-light)] transition text-sm font-medium"
               >
-                注册
+                登录
               </Link>
             </>
           )}
         </div>
 
         <button
-          className="md:hidden p-2 text-slate-600 hover:text-slate-900"
+          className="md:hidden p-2 text-[var(--text-secondary)] hover:text-[var(--primary)]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="菜单"
         >
@@ -119,13 +116,13 @@ export default function Navbar() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="md:hidden bg-[var(--card)] border-t border-[var(--border)]">
           <div className="px-4 py-2 space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition"
+                className="block px-4 py-3 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--bg-warm)] rounded-lg transition"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
@@ -136,7 +133,7 @@ export default function Navbar() {
                 {((session.user as any)?.role === 'ENTERPRISE' || (session.user as any)?.role === 'ADMIN') && (
                   <Link
                     href="/enterprise"
-                    className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition"
+                    className="block px-4 py-3 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--bg-warm)] rounded-lg transition"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     企业后台
@@ -144,36 +141,36 @@ export default function Navbar() {
                 )}
                 <Link
                   href="/notifications"
-                  className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition relative"
+                  className="block px-4 py-3 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--bg-warm)] rounded-lg transition relative"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   通知
                   {unreadCount > 0 && (
-                    <span className="ml-2 px-2 py-0.5 bg-orange-500 text-white text-xs font-bold rounded-full">
+                    <span className="ml-2 px-2 py-0.5 bg-[var(--gold)] text-[var(--text-primary)] text-xs font-bold rounded-full">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
                 </Link>
                 <Link
                   href="/profile"
-                  className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition"
+                  className="block px-4 py-3 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--bg-warm)] rounded-lg transition"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   个人资料
                 </Link>
                 <Link
                   href={`/profile/${(session.user as any)?.id}`}
-                  className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition"
+                  className="block px-4 py-3 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--bg-warm)] rounded-lg transition"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   名片
                 </Link>
-                <div className="px-4 py-2 text-sm text-gray-500 border-t border-gray-100 mt-2">
+                <div className="px-4 py-2 text-sm text-[var(--text-muted)] border-t border-[var(--border)] mt-2">
                   {session.user?.name}
                 </div>
                 <button
                   onClick={handleSignOut}
-                  className="block w-full text-left px-4 py-3 text-red-500 hover:bg-red-50 rounded-lg transition"
+                  className="block w-full text-left px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition"
                 >
                   退出登录
                 </button>
@@ -183,17 +180,10 @@ export default function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className="block px-4 py-3 text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition"
+                  className="block px-4 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] text-center rounded-lg hover:bg-[var(--primary-light)] transition font-medium"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   登录
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="block px-4 py-3 bg-[#4A3728] text-white text-center rounded-lg hover:bg-[#6B4E3D] transition font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  注册
                 </Link>
               </>
             )}

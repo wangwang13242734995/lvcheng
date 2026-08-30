@@ -1,0 +1,53 @@
+apiVersion: apps.sealos.io/v1
+kind: Template
+metadata:
+  name: lvcheng-app
+spec:
+  title: 履程 - 能力证明平台
+  description: 用作品说话，让能力可见
+  icon: https://api.dicebear.com/7.x/avataaars/svg?seed=lvcheng
+  inputs:
+    - name: DATABASE_URL
+      label: 数据库连接字符串
+      type: string
+      required: true
+      placeholder: postgresql://user:password@host:5432/dbname?sslmode=require
+    - name: NEXTAUTH_SECRET
+      label: NextAuth Secret
+      type: string
+      required: true
+      placeholder: 随机生成的32位字符
+  app:
+    kind: Deployment
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: lvcheng
+      template:
+        metadata:
+          labels:
+            app: lvcheng
+        spec:
+          containers:
+            - name: lvcheng
+              image: docker.io/library/node:20-alpine
+              command: ["sh", "-c"]
+              args:
+                - |
+                  git clone https://github.com/wangwang13242734995/lvcheng.git /app && \
+                  cd /app && \
+                  npm ci --legacy-peer-deps && \
+                  npx prisma generate && \
+                  npx next dev -p 8080 -H 0.0.0.0
+              ports:
+                - containerPort: 8080
+              env:
+                - name: DATABASE_URL
+                  value: "{{ .Inputs.DATABASE_URL }}"
+                - name: NEXTAUTH_SECRET
+                  value: "{{ .Inputs.NEXTAUTH_SECRET }}"
+                - name: PORT
+                  value: "8080"
+                - name: NODE_ENV
+                  value: "development"

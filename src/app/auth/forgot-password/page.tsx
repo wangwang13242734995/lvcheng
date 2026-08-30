@@ -1,10 +1,11 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 
 export default function ForgotPasswordPage() {
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -13,18 +14,23 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setError('');
 
-    if (!email) {
-      setError('请输入邮箱');
+    if (!/^1[3-9]\d{9}$/.test(phone)) {
+      setError('请输入有效的11位手机号');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setError('密码至少6位');
       return;
     }
 
     setLoading(true);
 
     try {
-      const res = await fetch('/api/auth/forgot-password', {
+      const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ phone, password: newPassword }),
       });
 
       const data = await res.json();
@@ -43,28 +49,30 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-8 bg-gradient-to-br from-[#4A3728] via-[#2C1F14] to-slate-900">
-      <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-xl relative z-10">
+    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 py-8 bg-gradient-to-br from-[var(--primary)] via-[var(--primary-light)] to-[var(--text-primary)]">
+      <div className="bg-[var(--card)] p-8 rounded-2xl w-full max-w-md shadow-xl relative z-10">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-[#4A3728] to-[#2C1F14] rounded-xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white text-2xl font-bold">履</span>
+          <div className="w-14 h-14 bg-gradient-to-br from-[var(--primary)] to-[var(--text-primary)] rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl font-bold font-serif">履</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">找回密码</h1>
-          <p className="text-slate-500 text-sm mt-1">输入邮箱，我们会发送重置链接</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] font-serif">重置密码</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-2">
+            输入手机号和新密码，立即重置
+          </p>
         </div>
 
         {success ? (
           <div className="text-center py-8">
-            <div className="w-16 h-16 bg-[#EDF3EB] rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-[#4A6B43] text-3xl">✓</span>
+            <div className="w-16 h-16 bg-[var(--bg-warm)] rounded-full flex items-center justify-center mx-auto mb-4 border border-[var(--border)]">
+              <span className="text-[var(--accent)] text-3xl">✓</span>
             </div>
-            <h2 className="text-xl font-semibold text-slate-900 mb-2">重置链接已发送</h2>
-            <p className="text-slate-500 text-sm">请检查你的邮箱，点击链接重置密码</p>
+            <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">密码重置成功</h2>
+            <p className="text-[var(--text-secondary)] text-sm">现在可以用新密码登录了</p>
             <Link
-              href="/auth/login"
-              className="inline-block mt-6 text-[#4A3728] hover:text-[#6B4E3D] font-medium"
+              href="/auth/login?reset=1"
+              className="inline-block mt-6 text-[var(--gold)] hover:text-[var(--gold-light)] font-medium"
             >
-              返回登录
+              去登录
             </Link>
           </div>
         ) : (
@@ -78,29 +86,42 @@ export default function ForgotPasswordPage() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">邮箱 *</label>
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">手机号</label>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#5D7A57] focus:border-transparent transition"
-                  placeholder="your@email.com"
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full px-4 py-3 border border-[var(--border)] rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition text-base bg-[var(--bg)] text-[var(--text-primary)]"
+                  placeholder="11位手机号"
+                  maxLength={11}
                   required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">新密码</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-[var(--border)] rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition text-base bg-[var(--bg)] text-[var(--text-primary)]"
+                  placeholder="至少6位"
+                  required
+                  minLength={6}
                 />
               </div>
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-[#4A3728] to-[#2C1F14] text-white py-2.5 rounded-xl hover:from-[#6B4E3D] hover:to-[#4A3728] disabled:opacity-50 transition font-medium shadow-sm"
+                className="w-full bg-gradient-to-r from-[var(--primary)] to-[var(--text-primary)] text-white py-3 rounded-xl hover:from-[var(--primary-light)] hover:to-[var(--primary)] disabled:opacity-50 transition font-medium shadow-sm text-base"
               >
-                {loading ? '发送中...' : '发送重置链接'}
+                {loading ? '重置中...' : '重置密码'}
               </button>
             </form>
 
-            <p className="text-center text-sm text-slate-500 mt-6">
+            <p className="text-center text-sm text-[var(--text-muted)] mt-6">
               记得密码了？{' '}
-              <Link href="/auth/login" className="text-orange-600 hover:underline font-medium">
-                登录
+              <Link href="/auth/login" className="text-[var(--gold)] hover:underline font-medium">
+                返回登录
               </Link>
             </p>
           </>

@@ -4,8 +4,10 @@ import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { checkRateLimit } from '@/lib/rate-limit';
 
+const phoneRegex = /^1[3-9]\d{9}$/;
+
 const resetSchema = z.object({
-  token: z.string().min(1, '无效的链接'),
+  phone: z.string().regex(phoneRegex, '请输入有效的11位手机号'),
   password: z.string().min(6, '密码至少6位'),
 });
 
@@ -30,16 +32,13 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const data = resetSchema.parse(body);
 
-    const user = await prisma.user.findFirst({
-      where: {
-        resetToken: data.token,
-        resetTokenExpiry: { gt: new Date() },
-      },
+    const user = await prisma.user.findUnique({
+      where: { phone: data.phone },
     });
 
     if (!user) {
       return NextResponse.json(
-        { error: '链接无效或已过期' },
+        { error: '该手机号尚未注册，请先在登录页输入手机号和密码创建账号' },
         { status: 400 }
       );
     }

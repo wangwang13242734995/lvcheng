@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { useEffect, useState, lazy, Suspense } from 'react';
@@ -313,29 +313,29 @@ export default function HomePage() {
   );
 
   return (
-    <div className="bg-white">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-[#F7FAF6]/30">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-100/30 rounded-full blur-3xl -translate-y-1/2" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#EDF3EB]/30 rounded-full blur-3xl translate-y-1/2" />
+    <div className="bg-[var(--bg)]">
+      {/* Hero Section - 欧洲古典博物馆风格 */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[var(--bg-warm)] via-[var(--bg)] to-[#F5EFE6]/30">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#E8DCC8]/40 rounded-full blur-3xl -translate-y-1/2" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#D6E4D2]/30 rounded-full blur-3xl translate-y-1/2" />
 
         <div className="relative max-w-7xl mx-auto px-4 pt-20 pb-16">
           <div className="text-center">
-            <p className="text-sm font-medium tracking-widest text-orange-600 uppercase mb-4">
-              能力平权 · 公平展示
+            <p className="text-sm font-medium tracking-[0.3em] text-[var(--gold)] uppercase mb-4 font-serif">
+              · 能力平权 · 公平展示 ·
             </p>
-            <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-[var(--text-primary)] mb-6 leading-tight font-serif">
               你的作品，
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] via-[var(--achievement)] to-[var(--gold)]">
                 比文凭更有说服力
               </span>
             </h1>
-            <p className="text-lg text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-[var(--text-secondary)] mb-10 max-w-2xl mx-auto leading-relaxed">
               别人凭什么判断你厉不厉害？不是证书，不是背书——是你做过什么、解决了什么、成长了多少。
               履程把你的真实能力变成看得见的数据——不靠标签，靠作品。
             </p>
 
-            {/* Search Bar */}
+            {/* Search Bar - 古典雅致风格 */}
             <div className="max-w-xl mx-auto mb-12">
               <div className="relative">
                 <input
@@ -343,22 +343,22 @@ export default function HomePage() {
                   placeholder="搜索人才、项目、技能..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-5 py-4 pl-12 rounded-xl border border-slate-200 focus:border-[#5D7A57] focus:ring-2 focus:ring-[#5D7A57]/20 transition shadow-sm"
+                  className="w-full px-5 py-4 pl-12 rounded-xl border border-[var(--border-elegant)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition shadow-sm bg-[var(--card)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)]"
                 />
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">🔍</span>
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)]">🔍</span>
               </div>
             </div>
 
             <div className="flex gap-4 justify-center">
               <Link
-                href="/auth/register"
-                className="bg-gradient-to-r from-[#4A3728] to-[#6B4E3D] text-white px-8 py-3.5 rounded-xl text-lg font-medium hover:from-[#6B4E3D] hover:to-[#3D5A37] transition shadow-lg shadow-[#4A3728]/20"
+                href="/auth/login"
+                className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-light)] text-[var(--primary-foreground)] px-8 py-3.5 rounded-xl text-lg font-medium hover:from-[var(--primary-light)] hover:to-[var(--accent)] transition shadow-lg shadow-[var(--primary)]/20"
               >
                 用作品证明自己
               </Link>
               <Link
                 href="/auth/login"
-                className="border border-slate-200 text-slate-700 px-8 py-3.5 rounded-xl text-lg font-medium hover:bg-slate-50 transition"
+                className="border border-[var(--border-elegant)] text-[var(--text-primary)] px-8 py-3.5 rounded-xl text-lg font-medium hover:bg-[var(--bg-warm)] transition"
               >
                 登录
               </Link>
@@ -367,17 +367,17 @@ export default function HomePage() {
 
           {/* 企业滚动展示 */}
           <div className="mt-12">
-            <p className="text-center text-sm text-slate-400 mb-6">已有这些企业在这里寻找人才</p>
+            <p className="text-center text-sm text-[var(--text-muted)] mb-6 tracking-wider">已有这些企业在这里寻找人才</p>
             {loading ? (
               <div className="flex justify-center gap-4 opacity-60">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="h-16 w-32 bg-slate-100 rounded-xl animate-pulse" />
+                  <div key={i} className="h-16 w-32 bg-[var(--bg-warm)] rounded-xl animate-pulse border border-[var(--border)]" />
                 ))}
               </div>
             ) : (
               <Suspense fallback={<div className="flex justify-center gap-4 opacity-60">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="h-16 w-32 bg-slate-100 rounded-xl animate-pulse" />
+                  <div key={i} className="h-16 w-32 bg-[var(--bg-warm)] rounded-xl animate-pulse border border-[var(--border)]" />
                 ))}
               </div>}>
                 <EnterpriseMarquee enterprises={featured.companies} />
@@ -387,49 +387,49 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-12 bg-white border-y border-slate-100">
+      {/* Stats - 古典风数据展示 */}
+      <section className="py-12 bg-[var(--card)] border-y border-[var(--border)]">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex justify-center gap-12">
             <div className="text-center">
-              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#7A9A75] to-[#5D7A57]">
+              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-light)] to-[var(--accent)]">
                 {stats.userCount || 128}+
               </p>
-              <p className="text-sm text-slate-400 mt-2">用作品说话的人</p>
+              <p className="text-sm text-[var(--text-muted)] mt-2">用作品说话的人</p>
             </div>
-            <div className="w-px bg-slate-200" />
+            <div className="w-px bg-[var(--border)]" />
             <div className="text-center">
-              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-orange-500">
+              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--gold)] to-[var(--achievement)]">
                 {stats.projectCount || 356}+
               </p>
-              <p className="text-sm text-slate-400 mt-2">被记录的作品</p>
+              <p className="text-sm text-[var(--text-muted)] mt-2">被记录的作品</p>
             </div>
-            <div className="w-px bg-slate-200" />
+            <div className="w-px bg-[var(--border)]" />
             <div className="text-center">
-              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-violet-500">
+              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary-light)] to-[var(--primary)]">
                 {stats.recordCount || 1024}+
               </p>
-              <p className="text-sm text-slate-400 mt-2">可见的成长</p>
+              <p className="text-sm text-[var(--text-muted)] mt-2">可见的成长</p>
             </div>
-            <div className="w-px bg-slate-200" />
+            <div className="w-px bg-[var(--border)]" />
             <div className="text-center">
-              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-500">
+              <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-[var(--gold)]">
                 {featured.companies.length || 8}+
               </p>
-              <p className="text-sm text-slate-400 mt-2">合作企业</p>
+              <p className="text-sm text-[var(--text-muted)] mt-2">合作企业</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* 优秀人才墙 & 精选项目 - Tab 切换 */}
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-[var(--bg-warm)]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <p className="text-sm font-medium text-orange-600 mb-2">✨ 发现人才与作品</p>
-              <h2 className="text-3xl font-bold text-slate-900">他们在用作品说话</h2>
-              <p className="text-slate-500 mt-2">不看标签，看能力——这些人已经用项目证明了自己</p>
+              <p className="text-sm font-medium text-[var(--gold)] mb-2 font-serif tracking-widest">✦ 发现人才与作品</p>
+              <h2 className="text-3xl font-bold text-[var(--text-primary)] font-serif">他们在用作品说话</h2>
+              <p className="text-[var(--text-secondary)] mt-2">不看标签，看能力——这些人已经用项目证明了自己</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex gap-2">
@@ -437,8 +437,8 @@ export default function HomePage() {
                   onClick={() => setActiveTab('users')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                     activeTab === 'users'
-                      ? 'bg-[#4A3728] text-white'
-                      : 'bg-white text-slate-600 hover:bg-slate-100'
+                      ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
+                      : 'bg-[var(--card)] text-[var(--text-secondary)] hover:bg-[var(--border)]/50'
                   }`}
                 >
                   👥 人才
@@ -447,8 +447,8 @@ export default function HomePage() {
                   onClick={() => setActiveTab('projects')}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                     activeTab === 'projects'
-                      ? 'bg-[#4A3728] text-white'
-                      : 'bg-white text-slate-600 hover:bg-slate-100'
+                      ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
+                      : 'bg-[var(--card)] text-[var(--text-secondary)] hover:bg-[var(--border)]/50'
                   }`}
                 >
                   🚀 项目
@@ -456,7 +456,7 @@ export default function HomePage() {
               </div>
               <Link
                 href={activeTab === 'users' ? '/talents' : '/explore'}
-                className="text-sm text-slate-500 hover:text-[#7A9A75] transition font-medium"
+                className="text-sm text-[var(--text-secondary)] hover:text-[var(--accent)] transition font-medium"
               >
                 查看全部 →
               </Link>
@@ -469,13 +469,13 @@ export default function HomePage() {
               {loading ? (
                 <div className="flex gap-5">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-72 h-72 bg-slate-100 rounded-xl animate-pulse" />
+                    <div key={i} className="w-72 h-72 bg-[var(--card)] rounded-xl animate-pulse border border-[var(--border)]" />
                   ))}
                 </div>
               ) : filteredUsers.length > 0 ? (
                 <Suspense fallback={<div className="flex gap-5">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-72 h-72 bg-slate-100 rounded-xl animate-pulse" />
+                    <div key={i} className="w-72 h-72 bg-[var(--card)] rounded-xl animate-pulse border border-[var(--border)]" />
                   ))}
                 </div>}>
                   <AutoScrollContainer speed={0.3} scrollAmount={320}>
@@ -495,7 +495,7 @@ export default function HomePage() {
                 </Suspense>
               ) : (
                 <div className="flex-shrink-0 w-full text-center py-12">
-                  <p className="text-slate-400">未找到匹配的人才</p>
+                  <p className="text-[var(--text-muted)]">未找到匹配的人才</p>
                 </div>
               )}
             </>
@@ -507,13 +507,13 @@ export default function HomePage() {
               {loading ? (
                 <div className="flex gap-5">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-80 bg-slate-100 rounded-xl animate-pulse p-4">
-                      <div className="h-4 bg-slate-200 rounded w-3/4 mb-3" />
-                      <div className="h-3 bg-slate-200 rounded w-full mb-2" />
-                      <div className="h-3 bg-slate-200 rounded w-2/3 mb-4" />
+                    <div key={i} className="w-80 bg-[var(--card)] rounded-xl animate-pulse p-4 border border-[var(--border)]">
+                      <div className="h-4 bg-[var(--border)] rounded w-3/4 mb-3" />
+                      <div className="h-3 bg-[var(--border)] rounded w-full mb-2" />
+                      <div className="h-3 bg-[var(--border)] rounded w-2/3 mb-4" />
                       <div className="flex gap-2">
                         {[1, 2, 3].map((j) => (
-                          <div key={j} className="h-6 bg-slate-200 rounded px-3" />
+                          <div key={j} className="h-6 bg-[var(--border)] rounded px-3" />
                         ))}
                       </div>
                     </div>
@@ -522,13 +522,13 @@ export default function HomePage() {
               ) : filteredProjects.length > 0 ? (
                 <Suspense fallback={<div className="flex gap-5">
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-80 bg-slate-100 rounded-xl animate-pulse p-4">
-                      <div className="h-4 bg-slate-200 rounded w-3/4 mb-3" />
-                      <div className="h-3 bg-slate-200 rounded w-full mb-2" />
-                      <div className="h-3 bg-slate-200 rounded w-2/3 mb-4" />
+                    <div key={i} className="w-80 bg-[var(--card)] rounded-xl animate-pulse p-4 border border-[var(--border)]">
+                      <div className="h-4 bg-[var(--border)] rounded w-3/4 mb-3" />
+                      <div className="h-3 bg-[var(--border)] rounded w-full mb-2" />
+                      <div className="h-3 bg-[var(--border)] rounded w-2/3 mb-4" />
                       <div className="flex gap-2">
                         {[1, 2, 3].map((j) => (
-                          <div key={j} className="h-6 bg-slate-200 rounded px-3" />
+                          <div key={j} className="h-6 bg-[var(--border)] rounded px-3" />
                         ))}
                       </div>
                     </div>
@@ -552,7 +552,7 @@ export default function HomePage() {
                 </Suspense>
               ) : (
                 <div className="flex-shrink-0 w-full text-center py-12">
-                  <p className="text-slate-400">未找到匹配的项目</p>
+                  <p className="text-[var(--text-muted)]">未找到匹配的项目</p>
                 </div>
               )}
             </>
@@ -561,12 +561,12 @@ export default function HomePage() {
       </section>
 
       {/* 合作企业展示 */}
-      <section className="py-20 bg-gradient-to-b from-slate-50 to-white">
+      <section className="py-20 bg-gradient-to-b from-[var(--bg-warm)] to-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <p className="text-sm font-medium text-blue-600 mb-2">🏢 合作企业</p>
-            <h2 className="text-3xl font-bold text-slate-900 mb-3">这些企业都在这里找人</h2>
-            <p className="text-slate-500 max-w-xl mx-auto">
+            <p className="text-sm font-medium text-[var(--accent)] mb-2 font-serif tracking-widest">🏛 合作企业</p>
+            <h2 className="text-3xl font-bold text-[var(--text-primary)] mb-3 font-serif">这些企业都在这里找人</h2>
+            <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
               不筛学历，只看能力——企业通过真实挑战寻找真正能解决问题的人
             </p>
           </div>
@@ -574,18 +574,18 @@ export default function HomePage() {
           {loading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-slate-100 rounded-xl p-4 animate-pulse">
-                  <div className="h-6 bg-slate-200 rounded w-1/2 mb-2" />
-                  <div className="h-3 bg-slate-200 rounded w-full" />
+                <div key={i} className="bg-[var(--card)] rounded-xl p-4 animate-pulse border border-[var(--border)]">
+                  <div className="h-6 bg-[var(--border)] rounded w-1/2 mb-2" />
+                  <div className="h-3 bg-[var(--border)] rounded w-full" />
                 </div>
               ))}
             </div>
           ) : (
             <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-slate-100 rounded-xl p-4 animate-pulse">
-                  <div className="h-6 bg-slate-200 rounded w-1/2 mb-2" />
-                  <div className="h-3 bg-slate-200 rounded w-full" />
+                <div key={i} className="bg-[var(--card)] rounded-xl p-4 animate-pulse border border-[var(--border)]">
+                  <div className="h-6 bg-[var(--border)] rounded w-1/2 mb-2" />
+                  <div className="h-3 bg-[var(--border)] rounded w-full" />
                 </div>
               ))}
             </div>}>
@@ -604,21 +604,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 挑战广场预览 */}
-      <section className="py-20 bg-white">
+      {/* 挑战广场预览 - 胡桃木棕深色区 */}
+      <section className="py-20 bg-[var(--bg)]">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-gradient-to-br from-[#4A3728] via-[#6B4E3D] to-[#2C1F14] rounded-3xl p-10 md:p-14 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-[var(--primary)] via-[var(--primary-light)] to-[var(--text-primary)] rounded-3xl p-10 md:p-14 relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/10 rounded-full translate-y-1/2 -translate-x-1/3" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[var(--gold)]/10 rounded-full translate-y-1/2 -translate-x-1/3" />
 
             <div className="relative z-10">
               <div className="text-center mb-10">
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <span className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">⚔️</span>
-                  <span className="text-[#D6E4D2]/80 text-sm font-medium">企业真实问题</span>
+                  <span className="text-[#D6E4D2]/80 text-sm font-medium tracking-wider">企业真实问题</span>
                 </div>
-                <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">用能力接招，不用简历敲门</h2>
-                <p className="text-[#D6E4D2]/70 max-w-xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 font-serif">用能力接招，不用简历敲门</h2>
+                <p className="text-[#E8DCC8]/70 max-w-xl mx-auto">
                   完成企业发布的真实挑战，获得认证和奖金，让能力直接被看见
                 </p>
               </div>
@@ -626,7 +626,7 @@ export default function HomePage() {
               {loading ? (
                 <div className="grid md:grid-cols-3 gap-5 mb-10">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-5 animate-pulse">
+                    <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-5 animate-pulse border border-white/10">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 bg-white/20 rounded-lg" />
                         <div className="h-4 bg-white/20 rounded w-1/2" />
@@ -635,7 +635,7 @@ export default function HomePage() {
                       <div className="h-3 bg-white/15 rounded w-full mb-2" />
                       <div className="h-3 bg-white/15 rounded w-3/4 mb-4" />
                       <div className="flex items-center justify-between">
-                        <div className="h-5 bg-orange-500/30 rounded px-3 flex items-center" />
+                        <div className="h-5 bg-[var(--gold)]/30 rounded px-3 flex items-center" />
                         <div className="h-3 bg-white/15 rounded w-16" />
                       </div>
                     </div>
@@ -644,7 +644,7 @@ export default function HomePage() {
               ) : (
                 <Suspense fallback={<div className="grid md:grid-cols-3 gap-5 mb-10">
                   {[1, 2, 3].map((i) => (
-                    <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-5 animate-pulse">
+                    <div key={i} className="bg-white/10 backdrop-blur rounded-xl p-5 animate-pulse border border-white/10">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 bg-white/20 rounded-lg" />
                         <div className="h-4 bg-white/20 rounded w-1/2" />
@@ -653,7 +653,7 @@ export default function HomePage() {
                       <div className="h-3 bg-white/15 rounded w-full mb-2" />
                       <div className="h-3 bg-white/15 rounded w-3/4 mb-4" />
                       <div className="flex items-center justify-between">
-                        <div className="h-5 bg-orange-500/30 rounded px-3 flex items-center" />
+                        <div className="h-5 bg-[var(--gold)]/30 rounded px-3 flex items-center" />
                         <div className="h-3 bg-white/15 rounded w-16" />
                       </div>
                     </div>
@@ -680,7 +680,7 @@ export default function HomePage() {
               <div className="text-center">
                 <Link
                   href="/challenges"
-                  className="inline-flex items-center gap-2 bg-orange-500 text-white px-8 py-3.5 rounded-xl font-semibold hover:bg-orange-400 transition shadow-lg shadow-orange-500/25"
+                  className="inline-flex items-center gap-2 bg-[var(--gold)] text-[var(--text-primary)] px-8 py-3.5 rounded-xl font-semibold hover:bg-[var(--gold-light)] transition shadow-lg shadow-[var(--gold)]/25"
                 >
                   浏览全部挑战
                   <span>→</span>
@@ -691,63 +691,63 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 痛点 + 解法 */}
-      <section className="py-20 bg-slate-50">
+      {/* 痛点 + 解法 - 古典卡片 */}
+      <section className="py-20 bg-[var(--bg-warm)]">
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-slate-900 mb-4">一张纸，装不下真实的你</h2>
-          <p className="text-center text-slate-500 mb-16 max-w-2xl mx-auto leading-relaxed">
+          <h2 className="text-3xl font-bold text-center text-[var(--text-primary)] mb-4 font-serif">一张纸，装不下真实的你</h2>
+          <p className="text-center text-[var(--text-secondary)] mb-16 max-w-2xl mx-auto leading-relaxed">
             传统筛选看标签，面试看印象，第一份工作还是看关系。<br />
             但你明明知道——真正让你与众不同的，是你熬过的夜、解过的难题、做过的项目。
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-white p-7 rounded-2xl border border-slate-100 hover:border-orange-200 hover:shadow-md transition-all">
-              <div className="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center mb-5">
+            <div className="bg-[var(--card)] p-7 rounded-2xl border border-[var(--border)] hover:border-[var(--gold)]/40 hover:shadow-md transition-all">
+              <div className="w-12 h-12 bg-[#F5EFE6] rounded-xl flex items-center justify-center mb-5">
                 <span className="text-2xl">⚡</span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">数据替你说话</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">数据替你说话</h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
                 六维能力模型不是别人给你打分——是你的项目数量、困难复杂度、成长斜率自动算出来的。
-                <strong className="text-slate-700">你的专业力是42还是78，不取决于谁的印象，取决于你做了什么。</strong>
+                <strong className="text-[var(--primary)]">你的专业力是42还是78，不取决于谁的印象，取决于你做了什么。</strong>
               </p>
             </div>
-            <div className="bg-white p-7 rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-md transition-all">
-              <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-5">
+            <div className="bg-[var(--card)] p-7 rounded-2xl border border-[var(--border)] hover:border-[var(--accent)]/40 hover:shadow-md transition-all">
+              <div className="w-12 h-12 bg-[#D6E4D2]/50 rounded-xl flex items-center justify-center mb-5">
                 <span className="text-2xl">🔗</span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">作品可以验证</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">作品可以验证</h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
                 每个项目都带着证据——代码链接、上线产品、获奖证明、量化数据。
-                <strong className="text-slate-700">不是你说你厉害，是你的作品证明你厉害。</strong>
+                <strong className="text-[var(--primary)]">不是你说你厉害，是你的作品证明你厉害。</strong>
                 这是简历做不到的。
               </p>
             </div>
-            <div className="bg-white p-7 rounded-2xl border border-slate-100 hover:border-violet-200 hover:shadow-md transition-all">
-              <div className="w-12 h-12 bg-violet-50 rounded-xl flex items-center justify-center mb-5">
+            <div className="bg-[var(--card)] p-7 rounded-2xl border border-[var(--border)] hover:border-[var(--primary-light)]/40 hover:shadow-md transition-all">
+              <div className="w-12 h-12 bg-[#E8DCC8] rounded-xl flex items-center justify-center mb-5">
                 <span className="text-2xl">📈</span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2">成长看得见</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">
+              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">成长看得见</h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
                 你的能力不是一天练成的，但简历上只有一个结果。
-                <strong className="text-slate-700">履程记录的是过程——从30分到70分的成长轨迹，比任何证书都有说服力。</strong>
+                <strong className="text-[var(--primary)]">履程记录的是过程——从30分到70分的成长轨迹，比任何证书都有说服力。</strong>
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-gradient-to-br from-[#4A3728] to-[#2C1F14] py-20">
+      {/* CTA - 深色胡桃木 */}
+      <section className="bg-gradient-to-br from-[var(--primary)] to-[var(--text-primary)] py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">别让标签定义你</h2>
-          <p className="text-[#EDF3EB]/70 mb-8 max-w-lg mx-auto text-lg">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 font-serif">别让标签定义你</h2>
+          <p className="text-[#E8DCC8]/70 mb-8 max-w-lg mx-auto text-lg">
             有人什么都做过，有人什么都没做过。区别不在出身，在于你做了什么。
             <br />
             在这里，作品说了算。
           </p>
           <Link
-            href="/auth/register"
-            className="inline-flex items-center gap-2 bg-orange-500 text-white px-10 py-4 rounded-xl text-lg font-semibold hover:bg-orange-400 transition shadow-xl shadow-orange-500/30"
+            href="/auth/login"
+            className="inline-flex items-center gap-2 bg-[var(--gold)] text-[var(--text-primary)] px-10 py-4 rounded-xl text-lg font-semibold hover:bg-[var(--gold-light)] transition shadow-xl shadow-[var(--gold)]/20"
           >
             用作品证明自己
             <span>→</span>
@@ -755,47 +755,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-950 text-slate-500 py-12">
+      {/* Footer - 胡桃木深色 */}
+      <footer className="bg-[var(--text-primary)] text-[var(--text-muted)] py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid sm:grid-cols-3 gap-8 mb-8">
             <div>
-              <p className="text-white font-semibold mb-3">履程</p>
-              <p className="text-sm leading-relaxed">用作品说话的能力展示平台，让每个人的成长都被看见。</p>
+              <p className="text-white font-semibold mb-3 font-serif">履程</p>
+              <p className="text-sm leading-relaxed text-[#8B7B68]">用作品说话的能力展示平台，让每个人的成长都被看见。</p>
             </div>
             <div>
-              <p className="text-white font-semibold mb-3">了解</p>
+              <p className="text-white font-semibold mb-3 font-serif">了解</p>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/about" className="hover:text-white transition">
+                  <Link href="/about" className="hover:text-[var(--gold-light)] transition">
                     关于我们
                   </Link>
                 </li>
                 <li>
-                  <Link href="/challenges" className="hover:text-white transition">
+                  <Link href="/challenges" className="hover:text-[var(--gold-light)] transition">
                     挑战广场
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <p className="text-white font-semibold mb-3">条款</p>
+              <p className="text-white font-semibold mb-3 font-serif">条款</p>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <Link href="/privacy" className="hover:text-white transition">
+                  <Link href="/privacy" className="hover:text-[var(--gold-light)] transition">
                     隐私政策
                   </Link>
                 </li>
                 <li>
-                  <Link href="/terms" className="hover:text-white transition">
+                  <Link href="/terms" className="hover:text-[var(--gold-light)] transition">
                     服务条款
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
-          <div className="border-t border-slate-800 pt-6 text-center">
-            <p className="text-sm">© 2026 履程 · 作品胜过文凭</p>
+          <div className="border-t border-[#3D3025] pt-6 text-center">
+            <p className="text-sm text-[#8B7B68]">© 2026 履程 · 作品胜过文凭</p>
           </div>
         </div>
       </footer>

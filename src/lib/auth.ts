@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
+import { DEFAULT_ABILITY_SCORES } from '@/lib/ability-constants';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -61,10 +62,33 @@ export const authOptions: NextAuthOptions = {
           where: { phone: credentials.phone },
         });
 
+        // 手机号不存在 → 自动注册
         if (!user) {
-          throw new Error('该手机号未注册');
+          const hashedPassword = await bcrypt.hash(credentials.password, 10);
+          const syntheticEmail = `${credentials.phone}@phone.local`;
+          const newName = `用户${credentials.phone.slice(-4)}`;
+
+          const newUser = await prisma.user.create({
+            data: {
+              name: newName,
+              email: syntheticEmail,
+              phone: credentials.phone,
+              password: hashedPassword,
+              role: 'STUDENT',
+            },
+          });
+
+          await prisma.abilityScore.create({
+            data: {
+              userId: newUser.id,
+              ...DEFAULT_ABILITY_SCORES,
+            },
+          });
+
+          return { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role };
         }
 
+        // 手机号存在 → 验证密码
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) {
           throw new Error('密码错误');

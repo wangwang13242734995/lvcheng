@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
@@ -16,7 +16,10 @@ function LoginForm() {
 
   useEffect(() => {
     if (searchParams.get('registered') === '1') {
-      setSuccessMsg('注册成功，请登录');
+      setSuccessMsg('账号已创建，请登录');
+    }
+    if (searchParams.get('reset') === '1') {
+      setSuccessMsg('密码已重置，请用新密码登录');
     }
   }, [searchParams]);
 
@@ -52,18 +55,22 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 bg-gradient-to-br from-[#4A3728] via-[#2C1F14] to-slate-900">
-      <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-xl relative z-10">
+    <div className="min-h-[calc(100vh-60px)] flex items-center justify-center px-4 bg-gradient-to-br from-[var(--primary)] via-[var(--primary-light)] to-[var(--text-primary)]">
+      <div className="bg-[var(--card)] p-8 rounded-2xl w-full max-w-md shadow-xl relative z-10">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-[#4A3728] to-[#2C1F14] rounded-xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white text-2xl font-bold">履</span>
+          <div className="w-14 h-14 bg-gradient-to-br from-[var(--primary)] to-[var(--text-primary)] rounded-xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-white text-2xl font-bold font-serif">履</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">欢迎回来</h1>
-          <p className="text-slate-500 text-sm mt-1">用手机号登录，继续积累你的能力</p>
+          <h1 className="text-2xl font-bold text-[var(--text-primary)] font-serif">进入履程</h1>
+          <p className="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">
+            输入手机号和密码即可
+            <br />
+            <span className="text-[var(--text-muted)] text-xs">首次使用将自动创建账号</span>
+          </p>
         </div>
 
         {successMsg && (
-          <div className="bg-[#F7FAF6] text-[#7A9A75] p-3 rounded-xl mb-4 text-sm flex items-center gap-2">
+          <div className="bg-[var(--bg-warm)] text-[var(--accent)] p-3 rounded-xl mb-4 text-sm flex items-center gap-2 border border-[var(--border)]">
             <span>✓</span>
             {successMsg}
           </div>
@@ -78,24 +85,24 @@ function LoginForm() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">手机号</label>
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">手机号</label>
             <input
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#5D7A57] focus:border-transparent transition text-base"
+              className="w-full px-4 py-3 border border-[var(--border)] rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition text-base bg-[var(--bg)] text-[var(--text-primary)]"
               placeholder="11位手机号"
               maxLength={11}
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">密码</label>
+            <label className="block text-sm font-medium text-[var(--text-primary)] mb-1.5">密码</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#5D7A57] focus:border-transparent transition text-base"
+              className="w-full px-4 py-3 border border-[var(--border)] rounded-xl focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition text-base bg-[var(--bg)] text-[var(--text-primary)]"
               placeholder="至少6位"
               required
             />
@@ -103,16 +110,16 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-[#4A3728] to-[#2C1F14] text-white py-3 rounded-xl hover:from-[#6B4E3D] hover:to-[#4A3728] disabled:opacity-50 transition font-medium shadow-sm text-base"
+            className="w-full bg-gradient-to-r from-[var(--primary)] to-[var(--text-primary)] text-white py-3 rounded-xl hover:from-[var(--primary-light)] hover:to-[var(--primary)] disabled:opacity-50 transition font-medium shadow-sm text-base"
           >
-            {loading ? '登录中...' : '登录'}
+            {loading ? '正在进入...' : '进入'}
           </button>
         </form>
 
-        <p className="text-center text-sm text-slate-500 mt-6">
-          还没有账号？{' '}
-          <Link href="/auth/register" className="text-orange-600 hover:underline font-medium">
-            立即注册
+        <p className="text-center text-sm text-[var(--text-muted)] mt-6">
+          忘记密码？{' '}
+          <Link href="/auth/forgot-password" className="text-[var(--gold)] hover:underline font-medium">
+            重置密码
           </Link>
         </p>
       </div>
@@ -123,7 +130,7 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#4A3728] via-[#2C1F14] to-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--primary)] via-[var(--primary-light)] to-[var(--text-primary)]">
         <div className="text-white">加载中...</div>
       </div>
     }>

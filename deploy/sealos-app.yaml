@@ -1,0 +1,150 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lvcheng
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lvcheng
+  namespace: lvcheng
+  labels:
+    app: lvcheng
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lvcheng
+  template:
+    metadata:
+      labels:
+        app: lvcheng
+    spec:
+      containers:
+        - name: lvcheng
+          # 如需使用云端自动构建，可将镜像替换为你的DockerHub/火山CR地址
+          # 例: registry.cn-beijing.volces.com/your-namespace/lvcheng:latest
+          # 此处使用 Sealos 云端 Git+Dockerfile 构建 (见下方 build)
+          image: docker.io/library/node:20-alpine
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              # ====== 云端首次启动构建模式 (适合无镜像仓库场景) ======
+              # 若已构建好镜像请替换上方 image 并删除这段 command/args
+              if [ ! -f /app/.initialized ]; then
+                apk add --no-cache git openssl
+                # === 本地代码部署: 把项目推到任意 Git Repo (GitHub/Gitee) 再用下面命令 ===
+                # 或将代码上传到 Sealos Code IDE
+                # 这里演示用内置模式：假设代码通过 volume 或 Dockerfile 已存在
+                echo "Waiting for code volume or prebuilt image..."
+                sleep infinity
+              else
+                cd /app
+                npx prisma db push --skip-generate
+                npx prisma generate
+                exec node node_modules/next/dist/bin/next start -p 8080 -H 0.0.0.0
+              fi
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "8080"
+            - name: HOSTNAME
+              value: "0.0.0.0"
+            - name: DATABASE_URL
+              value: "file:./data/dev.db"
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: lvcheng-secrets
+                  key: nextauth-secret
+            - name: NEXTAUTH_URL
+              value: "https://${INGRESS_HOST}"
+            - name: NEXT_TELEMETRY_DISABLED
+              value: "1"
+            - name: SKIP_ENV_VALIDATION
+              value: "1"
+          volumeMounts:
+            - name: app-data
+              mountPath: /app/data
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+      volumes:
+        - name: app-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: lvcheng-secrets
+  namespace: lvcheng
+type: Opaque
+stringData:
+  # 部署时请替换为 .deploy-nextauth-secret.txt 中的值
+  nextauth-secret: "YNrXmYubCg8Eyyh712zvBa3okDEDxmnu2KZvLnRZHw67qw2F"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lvcheng
+  namespace: lvcheng
+spec:
+  selector:
+    app: lvcheng
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lvcheng
+  namespace: lvcheng
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - lvcheng.127.0.0.1.sealosio.app
+      secretName: lvcheng-tls
+  rules:
+    - host: lvcheng.127.0.0.1.sealosio.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lvcheng
+                port:
+                  name: http

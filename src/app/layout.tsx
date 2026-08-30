@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Providers from "@/components/Providers";
@@ -82,7 +82,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="font-sans">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-50`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[var(--bg)]`}
       >
         <Providers>
           <WebVitalsMonitor />
