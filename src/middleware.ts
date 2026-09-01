@@ -1,4 +1,4 @@
-import { withAuth } from 'next-auth/middleware';
+import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
@@ -44,21 +44,33 @@ function validateOrigin(req: NextRequest): boolean {
   }
 }
 
-export default withAuth(
-  function middleware(req: NextRequest) {
-    if (!validateOrigin(req)) {
-      return new NextResponse('Forbidden - Invalid Origin', { status: 403 });
-    }
+// 显式指定 cookie 名，与 authOptions 的 useSecureCookies 保持一致，
+// 避免 withAuth 在无 NEXTAUTH_URL 时推断出错误的 cookie 名导致鉴权失败。
+const isProduction = process.env.NODE_ENV === 'production';
+const sessionCookieName = isProduction
+  ? '__Secure-next-auth.session-token'
+  : 'next-auth.session-token';
 
-    const response = NextResponse.next();
-    return addSecurityHeaders(response);
-  },
-  {
-    pages: {
-      signIn: '/auth/login',
-    },
+export default async function middleware(req: NextRequest) {
+  if (!validateOrigin(req)) {
+    return new NextResponse('Forbidden - Invalid Origin', { status: 403 });
   }
-);
+
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: sessionCookieName,
+  });
+
+  if (!token) {
+    const loginUrl = new URL('/auth/login', req.url);
+    loginUrl.searchParams.set('callbackUrl', req.nextUrl.pathname + req.nextUrl.search);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  const response = NextResponse.next();
+  return addSecurityHeaders(response);
+}
 
 export const config = {
   matcher: ['/dashboard/:path*', '/projects/:path*', '/onboarding/:path*', '/weekly-review/:path*', '/profile/:path*', '/enterprise/:path*'],
