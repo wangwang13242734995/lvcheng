@@ -34,7 +34,7 @@ ENV HOSTNAME=0.0.0.0
 ENV NEXT_TELEMETRY_DISABLED=1
 
 ENV DATABASE_URL="file:./data/dev.db"
-ENV NEXTAUTH_SECRET="${NEXTAUTH_SECRET:-dev-secret-change-in-production-abc123xyz}"
+# NEXTAUTH_SECRET 必须通过环境变量注入，不在镜像中硬编码
 
 RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 

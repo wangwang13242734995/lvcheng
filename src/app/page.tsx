@@ -64,35 +64,7 @@ interface FeaturedData {
   companies: FeaturedCompany[];
 }
 
-const mockUsers: FeaturedUser[] = [
-  { id: '1', name: '张明宇', avatar: null, bio: '全栈工程师，热爱开源', major: '计算机科学', skills: ['React', 'Node.js', 'TypeScript'], projectCount: 12, scores: { craft: 85, learn: 78, drive: 82, team: 75, grit: 80, express: 72, totalScore: 79 } },
-  { id: '2', name: '李思琪', avatar: null, bio: '产品设计师，用户体验专家', major: '工业设计', skills: ['Figma', 'UI/UX', '用户研究'], projectCount: 8, scores: { craft: 72, learn: 85, drive: 78, team: 88, grit: 70, express: 90, totalScore: 81 } },
-  { id: '3', name: '王浩然', avatar: null, bio: '算法工程师，AI 方向', major: '人工智能', skills: ['Python', 'PyTorch', 'NLP'], projectCount: 15, scores: { craft: 92, learn: 90, drive: 85, team: 70, grit: 88, express: 65, totalScore: 82 } },
-  { id: '4', name: '陈雨婷', avatar: null, bio: '前端开发，性能优化专家', major: '软件工程', skills: ['Vue.js', 'Webpack', '性能优化'], projectCount: 10, scores: { craft: 80, learn: 82, drive: 75, team: 80, grit: 76, express: 78, totalScore: 78 } },
-  { id: '5', name: '刘子轩', avatar: null, bio: '后端架构师，分布式系统', major: '计算机工程', skills: ['Go', 'Kubernetes', '微服务'], projectCount: 20, scores: { craft: 88, learn: 75, drive: 90, team: 82, grit: 85, express: 70, totalScore: 82 } },
-  { id: '6', name: '赵小蕾', avatar: null, bio: '数据分析，商业洞察', major: '统计学', skills: ['SQL', 'Python', 'Tableau'], projectCount: 7, scores: { craft: 70, learn: 88, drive: 72, team: 85, grit: 68, express: 85, totalScore: 78 } },
-];
-const mockProjects: FeaturedProject[] = [
-  { id: 'p1', title: '智能客服系统重构', type: 'CHALLENGE', description: '基于大语言模型重构企业客服系统，实现 80% 常见问题自动回复', techStack: ['React', 'Python', 'LangChain', 'PostgreSQL'], outcome: '响应时间从 30s 降至 2s，客户满意度提升 45%', outcomeType: 'QUANTIFIED', difficulty: 'HARD', userId: '1', user: { id: '1', name: '张明宇', avatar: null }, createdAt: '2026-06-15T00:00:00Z' },
-  { id: 'p2', title: '移动端设计系统', type: 'PERSONAL', description: '从零搭建一套完整的移动端设计系统，包含 200+ 组件', techStack: ['Figma', 'Design System', 'React Native'], outcome: '团队开发效率提升 60%，设计一致性达 95%', outcomeType: 'LAUNCHED', difficulty: 'MEDIUM', userId: '2', user: { id: '2', name: '李思琪', avatar: null }, createdAt: '2026-06-10T00:00:00Z' },
-  { id: 'p3', title: '论文：基于Transformer的代码生成', type: 'COMPETITION', description: '参加全国大学生计算机设计大赛的获奖项目', techStack: ['PyTorch', 'Transformer', 'CodeGen'], outcome: '全国一等奖', outcomeType: 'AWARD', difficulty: 'HARD', userId: '3', user: { id: '3', name: '王浩然', avatar: null }, createdAt: '2026-05-20T00:00:00Z' },
-  { id: 'p4', title: '电商平台首页性能优化', type: 'INTERNSHIP', description: '实习期间负责电商首页性能优化项目', techStack: ['Vue.js', 'Webpack', 'CDN'], outcome: '首屏加载时间从 4.2s 降至 1.5s，LCP 提升 64%', outcomeType: 'QUANTIFIED', difficulty: 'MEDIUM', userId: '4', user: { id: '4', name: '陈雨婷', avatar: null }, createdAt: '2026-06-01T00:00:00Z' },
-];
-const mockChallenges: FeaturedChallenge[] = [
-  { id: 'c1', company: '字节跳动', title: 'AI 面试助手开发挑战', description: '开发一个基于AI的智能面试助手系统，帮助候选人更好地准备面试', category: 'TECH', reward: '一等奖 ¥10,000 + 绿卡', rewardAmount: 10000, rewardType: 'CASH', deadline: '2026-08-15T00:00:00Z', spots: 50, status: 'OPEN', applicantCount: 23 },
-  { id: 'c2', company: '腾讯', title: '小程序体验优化', description: '针对微信小程序进行性能优化和用户体验改进', category: 'TECH', reward: '二等奖 ¥5,000', rewardAmount: 5000, rewardType: 'CASH', deadline: '2026-07-30T00:00:00Z', spots: 30, status: 'OPEN', applicantCount: 18 },
-  { id: 'c3', company: '小红书', title: '内容推荐算法优化', description: '优化内容推荐算法，提升用户互动率和内容消费时长', category: 'TECH', reward: '实习 offer + ¥8,000', rewardAmount: 8000, rewardType: 'CASH', deadline: '2026-08-01T00:00:00Z', spots: 20, status: 'OPEN', applicantCount: 35 },
-];
-const mockCompanies: FeaturedCompany[] = [
-  { name: '字节跳动', challengeCount: 8, totalReward: 50000 },
-  { name: '腾讯', challengeCount: 6, totalReward: 35000 },
-  { name: '阿里巴巴', challengeCount: 5, totalReward: 42000 },
-  { name: '小红书', challengeCount: 4, totalReward: 28000 },
-  { name: '美团', challengeCount: 3, totalReward: 20000 },
-  { name: '网易', challengeCount: 2, totalReward: 15000 },
-  { name: '小米', challengeCount: 3, totalReward: 18000 },
-  { name: '华为', challengeCount: 4, totalReward: 30000 },
-];
+// 演示数据已移除 - 首页只展示真实数据，避免虚假宣传
 
 const typeLabel: Record<string, string> = {
   CHALLENGE: '挑战', PERSONAL: '个人项目', COMPETITION: '竞赛', INTERNSHIP: '实习',
@@ -110,10 +82,9 @@ export default function HomePage() {
     fetch('/api/featured')
       .then((r) => r.json())
       .then((data) => {
-        if (data.users && data.users.length > 0) setFeatured(data);
-        else setFeatured({ users: mockUsers, projects: mockProjects, challenges: mockChallenges, companies: mockCompanies });
+        setFeatured(data || { users: [], projects: [], challenges: [], companies: [] });
       })
-      .catch(() => setFeatured({ users: mockUsers, projects: mockProjects, challenges: mockChallenges, companies: mockCompanies }))
+      .catch(() => setFeatured({ users: [], projects: [], challenges: [], companies: [] }))
       .finally(() => setLoading(false));
   }, []);
 
@@ -125,10 +96,10 @@ export default function HomePage() {
   );
 
   const statsArr = [
-    { value: stats.userCount || 128, suffix: '+', label: '用作品说话的人' },
-    { value: stats.projectCount || 356, suffix: '+', label: '被记录的作品' },
-    { value: stats.recordCount || 1024, suffix: '+', label: '可见的成长' },
-    { value: featured.companies.length || 8, suffix: '+', label: '合作企业' },
+    { value: stats.userCount || 0, suffix: '+', label: '用作品说话的人' },
+    { value: stats.projectCount || 0, suffix: '+', label: '被记录的作品' },
+    { value: stats.recordCount || 0, suffix: '+', label: '可见的成长' },
+    { value: featured.companies.length || 0, suffix: '+', label: '合作企业' },
   ];
 
   return (
@@ -198,6 +169,7 @@ export default function HomePage() {
       </AuroraBackground>
 
       {/* ============ 企业 marquee ============ */}
+      {featured.companies.length > 0 && (
       <section className="border-y border-[#2A2A30] bg-[#0A0A0B] py-10">
         <p className="text-center text-xs uppercase tracking-[0.25em] text-[#71717A] mb-6">已有这些企业在这里寻找人才</p>
         <Suspense fallback={<div className="h-10" />}>
@@ -206,6 +178,7 @@ export default function HomePage() {
           </div>
         </Suspense>
       </section>
+      )}
 
       {/* ============ 人才 / 项目 bento ============ */}
       <section className="bg-[#0A0A0B] py-24">
@@ -234,7 +207,15 @@ export default function HomePage() {
             </div>
           </div>
 
-          {activeTab === 'users' ? (
+          {loading ? (
+            <div className="text-center py-20 text-[#71717A]">加载中...</div>
+          ) : activeTab === 'users' ? (
+            filteredUsers.length === 0 ? (
+              <div className="text-center py-20 rounded-2xl border border-dashed border-[#2A2A30]">
+                <p className="text-[#A1A1AA] mb-2">还没有人才展示</p>
+                <p className="text-sm text-[#71717A]">成为第一个用作品说话的人</p>
+              </div>
+            ) : (
             <StaggerGroup className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {filteredUsers.map((u) => (
                 <motion.div
@@ -269,6 +250,12 @@ export default function HomePage() {
                 </motion.div>
               ))}
             </StaggerGroup>
+            )
+          ) : filteredProjects.length === 0 ? (
+            <div className="text-center py-20 rounded-2xl border border-dashed border-[#2A2A30]">
+              <p className="text-[#A1A1AA] mb-2">还没有项目展示</p>
+              <p className="text-sm text-[#71717A]">记录你的第一个项目，让能力被看见</p>
+            </div>
           ) : (
             <StaggerGroup className="grid sm:grid-cols-2 lg:grid-cols-2 gap-5">
               {filteredProjects.map((p) => (
@@ -318,22 +305,29 @@ export default function HomePage() {
                   <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">用能力接招，不用简历敲门</h2>
                   <p className="text-[#A1A1AA] mt-2 max-w-xl mx-auto">完成企业发布的真实挑战，获得认证和奖金，让能力直接被看见</p>
                 </div>
-                <StaggerGroup className="grid md:grid-cols-3 gap-5">
-                  {featured.challenges.slice(0, 3).map((c) => (
-                    <motion.div key={c.id} variants={staggerItem} className="rounded-2xl border border-[#2A2A30] bg-[#1A1A1F]/60 p-6 hover:border-[#6366F1]/40 transition-colors">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-[#FAFAFA]">{c.company}</span>
-                        <span className="rounded-md bg-[#F59E0B]/15 px-2 py-0.5 text-xs text-[#FCD34D]">{c.rewardAmount ? `¥${c.rewardAmount.toLocaleString()}` : '奖金'}</span>
-                      </div>
-                      <h3 className="text-base font-medium mb-2">{c.title}</h3>
-                      <p className="text-sm text-[#A1A1AA] line-clamp-2 mb-4">{c.description}</p>
-                      <div className="flex items-center justify-between text-xs text-[#71717A]">
-                        <span>{c.applicantCount} 人报名</span>
-                        <Link href={`/challenges/${c.id}`} className="text-[#818CF8] hover:text-[#A5B4FC] transition">参与 →</Link>
-                      </div>
-                    </motion.div>
-                  ))}
-                </StaggerGroup>
+                {featured.challenges.length > 0 ? (
+                  <StaggerGroup className="grid md:grid-cols-3 gap-5">
+                    {featured.challenges.slice(0, 3).map((c) => (
+                      <motion.div key={c.id} variants={staggerItem} className="rounded-2xl border border-[#2A2A30] bg-[#1A1A1F]/60 p-6 hover:border-[#6366F1]/40 transition-colors">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-sm font-medium text-[#FAFAFA]">{c.company}</span>
+                          <span className="rounded-md bg-[#F59E0B]/15 px-2 py-0.5 text-xs text-[#FCD34D]">{c.rewardAmount ? `¥${c.rewardAmount.toLocaleString()}` : '奖金'}</span>
+                        </div>
+                        <h3 className="text-base font-medium mb-2">{c.title}</h3>
+                        <p className="text-sm text-[#A1A1AA] line-clamp-2 mb-4">{c.description}</p>
+                        <div className="flex items-center justify-between text-xs text-[#71717A]">
+                          <span>{c.applicantCount} 人报名</span>
+                          <Link href={`/challenges/${c.id}`} className="text-[#818CF8] hover:text-[#A5B4FC] transition">参与 →</Link>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </StaggerGroup>
+                ) : (
+                  <div className="text-center py-12 rounded-2xl border border-dashed border-[#2A2A30]">
+                    <p className="text-[#A1A1AA] mb-2">暂无企业挑战</p>
+                    <p className="text-sm text-[#71717A]">企业合作正在洽谈中，敬请期待</p>
+                  </div>
+                )}
                 <div className="text-center mt-10">
                   <MagneticButton href="/challenges" className="inline-flex items-center gap-2 rounded-xl bg-[#F59E0B] px-7 py-3.5 text-base font-medium text-[#1A1A1F] hover:bg-[#FCD34D] transition-colors">
                     浏览全部挑战 <span aria-hidden>→</span>
