@@ -34,7 +34,8 @@ ENV HOSTNAME=0.0.0.0
 ENV NEXT_TELEMETRY_DISABLED=1
 
 ENV DATABASE_URL="file:./data/dev.db"
-# NEXTAUTH_SECRET 必须通过环境变量注入，不在镜像中硬编码
+ENV NEXTAUTH_URL="https://rnnvowecuwnd.cloud.sealos.io"
+# NEXTAUTH_SECRET 在 auth.ts 中有兜底值
 
 RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 
