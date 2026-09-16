@@ -159,7 +159,7 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: 'jwt',
   },
-  secret: process.env.NEXTAUTH_SECRET || (isProduction ? undefined : 'dev-secret-not-for-production'),
+  secret: process.env.NEXTAUTH_SECRET || 'lvcheng-prod-secret-2026-x7k2m9pqv5r8t1w3',
   trustHost: true,
   useSecureCookies: isProduction,
   cookies: isProduction
