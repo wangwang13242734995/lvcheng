@@ -1,14 +1,14 @@
 # ============== Stage 1: Dependencies ==============
-FROM node:20-slim AS deps
+FROM node:20-alpine AS deps
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends openssl ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache openssl ca-certificates python3 make g++
 
 COPY package.json package-lock.json* ./
 # --ignore-scripts 跳过 postinstall(prisma generate)，因为 prisma schema 还没 COPY
 RUN npm install --legacy-peer-deps --ignore-scripts
 
 # ============== Stage 2: Build ==============
-FROM node:20-slim AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -25,7 +25,7 @@ RUN npx prisma generate
 RUN npm run build
 
 # ============== Stage 3: Runtime ==============
-FROM node:20-slim AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -37,7 +37,7 @@ ENV DATABASE_URL="file:./data/dev.db"
 ENV NEXTAUTH_URL="https://rnnvowecuwnd.cloud.sealos.io"
 # NEXTAUTH_SECRET 在 auth.ts 中有兜底值
 
-RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache openssl
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next

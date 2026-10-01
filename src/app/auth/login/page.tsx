@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
@@ -38,19 +37,53 @@ function LoginForm() {
     }
 
     setLoading(true);
+    setError('');
 
-    const result = await signIn('credentials', {
-      phone,
-      password,
-      redirect: false,
-    });
+    try {
+      // 1. 获取 CSRF token
+      const csrfRes = await fetch('/api/auth/csrf', { credentials: 'include' });
+      if (!csrfRes.ok) {
+        throw new Error('无法连接服务器，请刷新重试');
+      }
+      const { csrfToken } = await csrfRes.json();
 
-    if (result?.error) {
-      setError(result.error);
-      setLoading(false);
-    } else {
+      // 2. 用 form-urlencoded 提交登录（NextAuth 要求的标准格式）
+      const formBody = new URLSearchParams({
+        phone,
+        password,
+        csrfToken,
+        callbackUrl: window.location.origin + '/dashboard',
+        json: 'true',
+      });
+
+      const loginRes = await fetch('/api/auth/callback/credentials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: formBody.toString(),
+        credentials: 'include',
+        redirect: 'manual',
+      });
+
+      // 3. 处理响应
+      if (loginRes.status === 401) {
+        const data = await loginRes.json().catch(() => ({}));
+        const errUrl = data.url || '';
+        if (errUrl.includes('密码错误')) {
+          throw new Error('密码错误，请重试或重置密码');
+        }
+        throw new Error('手机号或密码错误');
+      }
+
+      if (loginRes.status >= 400) {
+        throw new Error('登录失败，请稍后重试');
+      }
+
+      // 4. 成功 - 跳转
       router.push('/dashboard');
       router.refresh();
+    } catch (err: any) {
+      setError(err.message || '登录失败，请重试');
+      setLoading(false);
     }
   };
 

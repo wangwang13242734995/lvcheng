@@ -17,3 +17,11 @@ prod.pid
 data/
 *.db
 *.db-journal
+
+# 临时脚本
+!next.config.mjs
+*.mjs
+# 截图文件
+*.png
+# sealos url
+sealos-url.txt
