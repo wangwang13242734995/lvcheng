@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 
 function LoginForm() {
@@ -40,47 +41,28 @@ function LoginForm() {
     setError('');
 
     try {
-      // 1. 获取 CSRF token
-      const csrfRes = await fetch('/api/auth/csrf', { credentials: 'include' });
-      if (!csrfRes.ok) {
-        throw new Error('无法连接服务器，请刷新重试');
-      }
-      const { csrfToken } = await csrfRes.json();
-
-      // 2. 用 form-urlencoded 提交登录（NextAuth 要求的标准格式）
-      const formBody = new URLSearchParams({
+      // 使用 NextAuth 的 signIn，redirect:false 让我们手动处理结果
+      // 这样 session 状态会自动更新，避免 dashboard 判定未登录又跳回登录页
+      const result = await signIn('credentials', {
         phone,
         password,
-        csrfToken,
-        callbackUrl: window.location.origin + '/dashboard',
-        json: 'true',
+        redirect: false,
+        callbackUrl: '/dashboard',
       });
 
-      const loginRes = await fetch('/api/auth/callback/credentials', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formBody.toString(),
-        credentials: 'include',
-        redirect: 'manual',
-      });
-
-      // 3. 处理响应
-      if (loginRes.status === 401) {
-        const data = await loginRes.json().catch(() => ({}));
-        const errUrl = data.url || '';
-        if (errUrl.includes('密码错误')) {
-          throw new Error('密码错误，请重试或重置密码');
+      if (result?.error) {
+        // NextAuth 把错误放在 error 字段里
+        if (result.error.includes('密码错误') || result.error.includes('Credentials')) {
+          setError('密码错误，该手机号已注册。请重试或点击下方「重置密码」');
+        } else {
+          setError('手机号或密码错误，请重试');
         }
-        throw new Error('手机号或密码错误');
+        setLoading(false);
+        return;
       }
 
-      if (loginRes.status >= 400) {
-        throw new Error('登录失败，请稍后重试');
-      }
-
-      // 4. 成功 - 跳转
-      router.push('/dashboard');
-      router.refresh();
+      // 成功 - 用 window.location 强制跳转，确保 session cookie 生效
+      window.location.href = '/dashboard';
     } catch (err: any) {
       setError(err.message || '登录失败，请重试');
       setLoading(false);
@@ -98,7 +80,7 @@ function LoginForm() {
           <p className="text-[var(--text-secondary)] text-sm mt-2 leading-relaxed">
             输入手机号和密码即可
             <br />
-            <span className="text-[var(--text-muted)] text-xs">首次使用将自动创建账号</span>
+            <span className="text-[var(--accent)] text-xs font-medium">✨ 新手机号将自动创建账号，无需单独注册</span>
           </p>
         </div>
 
@@ -110,9 +92,16 @@ function LoginForm() {
         )}
 
         {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm flex items-center gap-2">
+          <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm flex items-start gap-2">
             <span>⚠️</span>
-            {error}
+            <div>
+              {error}
+              {error.includes('密码错误') && (
+                <Link href="/auth/forgot-password" className="underline ml-1 font-medium hover:text-red-700">
+                  去重置 →
+                </Link>
+              )}
+            </div>
           </div>
         )}
 
